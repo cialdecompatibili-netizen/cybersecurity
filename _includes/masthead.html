@@ -129,7 +129,17 @@
             Strumenti a destra: ricerca del tema (+ carrello inserito da head/custom.html).
             Togli questo <li> per eliminare la lente. Il carrello sparisce con lei (si appoggia qui).
           {%- endcomment -%}
-          {%- if site.languages.size > 0 -%}
+          {%- comment -%}
+            LINGUE ATTIVE (adattivo, nessuna lingua scritta a mano): lingua base + site.languages + ogni `lang` trovato in pagine e articoli.
+            Basta creare la cartella <xx>/ (es. con automation/attiva_lingua.py): la bandiera compare da sola, anche se `languages` in _config.yml non e' aggiornato.
+            Il selettore si mostra solo se le lingue sono almeno due.
+          {%- endcomment -%}
+          {%- assign lg_csv = ',' | append: site.default_lang | append: ',' -%}
+          {%- for l in site.languages -%}{%- assign lg_tok = ',' | append: l | append: ',' -%}{%- unless lg_csv contains lg_tok -%}{%- assign lg_csv = lg_csv | append: l | append: ',' -%}{%- endunless -%}{%- endfor -%}
+          {%- assign lg_found = site.pages | concat: site.posts | map: 'lang' | uniq -%}
+          {%- for l in lg_found -%}{%- if l and l != '' -%}{%- assign lg_tok = ',' | append: l | append: ',' -%}{%- unless lg_csv contains lg_tok -%}{%- assign lg_csv = lg_csv | append: l | append: ',' -%}{%- endunless -%}{%- endif -%}{%- endfor -%}
+          {%- assign lg_list = lg_csv | split: ',' -%}
+          {%- if lg_list.size > 2 -%}
           {%- comment -%} SELETTORE LINGUA: bandiera + tendina. Lingua corrente e link alle traduzioni sono calcolati da assets/js/menu.js (il masthead e' in cache). {%- endcomment -%}
           <li class="nv__item nv__item--dd nv__item--lang" data-lang-base="{{ site.baseurl }}" data-lang-default="{{ site.default_lang }}">
             <button class="nv__link nv__link--dd nv__lang-btn" type="button" data-nv-dropdown-toggle aria-haspopup="true" aria-expanded="false" aria-label="Lingua / Language">

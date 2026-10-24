@@ -72,7 +72,7 @@ defaults:
       type: posts
     values:
       layout: single
-      permalink: /en/:categories/:title/
+      permalink: /:categories/:title/
   - scope:
       path: ""
     values:
