@@ -4,27 +4,30 @@ title: "Servizi"
 permalink: /servizi/
 ref: servizi
 author_profile: false
-seo_description: "Messa in sicurezza di siti e server PHP: verifica versione, aggiornamento, controllo compromissioni, password e backup."
+seo_description: "Servizi di sicurezza informatica: prevenire, rilevare, rispondere e ripristinare per siti, server e applicazioni PHP."
 ---
 
-Quattro interventi per chi ha un sito o un server PHP e vuole sapere a che punto è. Il prezzo si concorda prima di iniziare, in base al numero di siti e al tipo di hosting.
+Un unico ciclo in quattro fasi, per organizzazioni che dipendono da siti e applicazioni web. Il prezzo si concorda prima di iniziare, in base al numero di sistemi e al tipo di hosting.
 
-## 1. Verifica della versione PHP e aggiornamento
-Controlliamo la versione in uso (anche per ogni sito su uno stesso server) e la portiamo a una release corretta. Su hosting condiviso o gestito verifichiamo con il provider che l'aggiornamento sia stato fatto.
+## Prevenire
+Censimento delle versioni di PHP e dei componenti in uso, su ogni sito e server. Aggiornamento di PHP e delle applicazioni a versioni corrette. Su hosting condiviso o gestito, verifica con il provider che l'aggiornamento sia stato davvero eseguito.
 
-## 2. Controllo di segni di compromissione
-Cerchiamo file modificati di recente, file PHP in cartelle dove non dovrebbero stare, utenti e accessi anomali, richieste sospette nei log. Un controllo non può garantire che non sia successo nulla: ti diciamo cosa abbiamo trovato e cosa no.
+## Rilevare
+Controllo di file modificati di recente, file PHP in cartelle dove non dovrebbero stare, utenti e accessi anomali e richieste sospette nei log. Un controllo non può garantire che non sia successo nulla: indichiamo cosa abbiamo trovato e cosa no.
 
-## 3. Cambio di password e chiavi
-Se esiste anche un solo dubbio, cambiamo password di pannello, database, FTP/SSH, chiavi API e token presenti sul server.
+## Rispondere
+Cambio di password di pannello, database, FTP/SSH, chiavi API e token presenti sul server. Se emerge una compromissione, indicazioni chiare sui passi successivi e relazione scritta su quanto fatto.
 
-## 4. Backup verificato
-Configuriamo o controlliamo il backup e proviamo un ripristino, così sai che funziona prima di averne bisogno.
+## Ripristinare
+Backup configurato o controllato, con prova di ripristino. Una procedura di ripartenza scritta, così in caso di incidente si sa già cosa fare.
 
-## Per chi
-Chi ha un VPS o un hosting non gestito, agenzie con siti di clienti, applicazioni PHP su misura o CMS non più aggiornati.
+## Come si svolge un incarico
+1. **Incarico scritto**: definiamo quali sistemi rientrano nell'intervento.
+2. **Valutazione**: versioni, configurazione, segnali di compromissione.
+3. **Intervento**: correzioni concordate, con prezzo definito prima.
+4. **Relazione**: cosa abbiamo controllato, cosa abbiamo cambiato, cosa resta da fare.
 
 ## Cosa non facciamo
-Non interveniamo su sistemi di cui non hai la titolarità o un incarico scritto, e non promettiamo siti "a prova di hacker": mettiamo in sicurezza dalle falle note.
+Non interveniamo su sistemi di cui non hai la titolarità o un incarico scritto e non promettiamo siti "a prova di hacker": mettiamo in sicurezza dalle falle note.
 
-[Contattaci]({{ '/contatti/' | relative_url }}){: .btn .btn--primary}
+[Richiedi una valutazione]({{ '/contatti/' | relative_url }}){: .btn .btn--primary}
