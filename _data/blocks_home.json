@@ -3,7 +3,7 @@
     "id": "hero",
     "nome": "Hero",
     "enabled": true,
-    "html": "<div class=\"gc\"><section class=\"gc-hero\"><div class=\"gc-wrap gc-hero-in\"><div><p class=\"gc-eyebrow\">Sicurezza informatica nell&#39;era dell&#39;AI</p><h1 class=\"gc-h1\">Le falle ora si scoprono con l&#39;AI. <em>Aggiorna prima di chi le sfrutta.</em></h1><p class=\"gc-lead\">Con PHP2Shell un bug presente da anni &egrave; diventato un attacco concreto, con l&#39;aiuto dell&#39;intelligenza artificiale. Mettiamo in sicurezza siti e server di piccole imprese e agenzie: verifica, aggiornamento, controllo e backup.</p><div class=\"gc-act\"><a class=\"gc-btn gc-btn-a\" href=\"__BASEURL__/emergenza-php2shell/\">Emergenza PHP2Shell</a><a class=\"gc-btn gc-btn-o\" href=\"__BASEURL__/servizi/\">Cosa facciamo</a></div></div><div class=\"gc-hero-art\"><div class=\"gc-art\" style=\"--c1:#4f35e8;--c2:#22d3ee\" aria-hidden=\"true\">&#9678;</div><div class=\"gc-art\" style=\"--c1:#16a34a;--c2:#facc15\" aria-hidden=\"true\">&#10070;</div><div class=\"gc-art\" style=\"--c1:#0e1116;--c2:#ec4899\" aria-hidden=\"true\">&#8960;</div></div></div></section></div>"
+    "html": "<div class=\"gc\"><section class=\"gc-hero\"><div class=\"gc-wrap gc-hero-in\"><div><p class=\"gc-eyebrow\">Sicurezza informatica per le imprese</p><h1 class=\"gc-h1\">Sicurezza informatica nell&#39;era dell&#39;AI. <em>Siti e server protetti, aggiornati, sotto controllo.</em></h1><p class=\"gc-lead\">Con l&#39;AI le falle vengono scoperte e sfruttate sempre pi&ugrave; in fretta. Aiutiamo piccole imprese e agenzie a tenere in ordine siti, server e applicazioni: verifica, aggiornamento, controllo e backup.</p><div class=\"gc-act\"><a class=\"gc-btn gc-btn-a\" href=\"__BASEURL__/servizi/\">I nostri servizi</a><a class=\"gc-btn gc-btn-o\" href=\"__BASEURL__/contatti/\">Contattaci</a></div></div><div class=\"gc-hero-art\"><div class=\"gc-art\" style=\"--c1:#4f35e8;--c2:#22d3ee\" aria-hidden=\"true\">&#9678;</div><div class=\"gc-art\" style=\"--c1:#16a34a;--c2:#facc15\" aria-hidden=\"true\">&#10070;</div><div class=\"gc-art\" style=\"--c1:#0e1116;--c2:#ec4899\" aria-hidden=\"true\">&#8960;</div></div></div></section></div>"
   },
   {
     "id": "servizi",
@@ -12,10 +12,10 @@
     "html": "<div class=\"gc\"><section class=\"gc-sec gc-soft\" id=\"servizi\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Messa in sicurezza</p><h2 class=\"gc-h2\">Quattro interventi, un prezzo concordato prima</h2><div class=\"gc-plat\"><div class=\"gc-pl\"><span class=\"n\">1</span><b>Versione PHP e aggiornamento</b><p>Controlliamo quale PHP gira sul tuo server o hosting e lo portiamo a una versione corretta.</p></div><div class=\"gc-pl\"><span class=\"n\">2</span><b>Segni di compromissione</b><p>Cerchiamo file e accessi sospetti, in particolare dopo la finestra in cui la falla era sfruttabile.</p></div><div class=\"gc-pl\"><span class=\"n\">3</span><b>Password e chiavi</b><p>Cambiamo password, chiavi e token che un attaccante potrebbe aver letto.</p></div><div class=\"gc-pl\"><span class=\"n\">4</span><b>Backup verificato</b><p>Un backup fatto e provato a ripristinare, non solo &quot;attivo&quot; sulla carta.</p></div></div></div></section></div>"
   },
   {
-    "id": "emergenza",
-    "nome": "Emergenza PHP2Shell",
+    "id": "avvisi",
+    "nome": "Avvisi di sicurezza",
     "enabled": true,
-    "html": "<div class=\"gc\"><section class=\"gc-sec gc-dark\" id=\"emergenza\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">21 ottobre 2026</p><h2 class=\"gc-h2\">PHP2Shell: due falle critiche, una sola richiesta web</h2><p class=\"gc-lead\">CVE-2026-109618 e CVE-2026-109619 permettono di eseguire codice su un server senza password. Le versioni corrette sono PHP 8.5.12, 8.4.27, 8.3.36 e 8.2.35. Se non sai che versione hai, partiamo da l&igrave;.</p><a class=\"gc-btn\" href=\"__BASEURL__/emergenza-php2shell/\">Cosa fare adesso</a></div></section></div>"
+    "html": "<div class=\"gc\"><section class=\"gc-sec gc-dark\" id=\"avvisi\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Blog</p><h2 class=\"gc-h2\">Avvisi di sicurezza, spiegati in italiano</h2><p class=\"gc-lead\">Quando esce una falla grave, come PHP2Shell in PHP, la raccontiamo in modo chiaro: chi &egrave; a rischio, cosa aggiornare e cosa controllare.</p><a class=\"gc-btn\" href=\"__BASEURL__/blog/\">Leggi gli avvisi</a></div></section></div>"
   },
   {
     "id": "metodo",
