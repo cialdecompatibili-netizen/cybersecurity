@@ -17,12 +17,16 @@ Funziona su Jekyll puro (GitHub Pages), senza plugin. Lingua base alla radice (`
 | SEO | `_includes/head/custom.html` | `hreflang` tra versioni con lo stesso `ref`, `noindex` sulle `copia` |
 | Selettore lingua | `_includes/footer/custom.html`, `masthead.html`, `assets/js/menu.js` | Appare solo se la traduzione esiste |
 | Admin | voce **Lingue** (`admin/js/lingue.js`) | Crea lingua, tabella stato, "Crea copia", "Segna tradotto" |
-| Controllo modifiche | `automation/traduzioni_sync.py` + `.github/workflows/traduzioni.yml` | Se cambia l'italiano, mette `da_aggiornare` alle traduzioni |
+| Controllo modifiche | `automation/traduzioni_sync.py` + hook `.githooks/pre-commit` | Se cambia l'italiano, mette `da_aggiornare` alle traduzioni |
 | Traduzione automatica | `automation/traduci_lingua.py` | Traduce in blocco gli articoli `copia` |
 
 Il `tr_hash` e' l'hash del testo originale quando e' stato tradotto. Lo stesso algoritmo e' in `lingue.js` (`lgHash`) e in `traduzioni_sync.py` (`lg_hash`): se cambi uno, cambia anche l'altro.
 
 ## Aggiungere una lingua (es. tedesco)
+
+**Metodo veloce (automatico): clona la cartella.** Copia `en/` in `de/` (e, se c'e', `_data/i18n/en/` in `_data/i18n/de/`), poi fai commit e push. Il sito la rileva da solo (bandiera nel selettore, `_includes/lingue-attive.html`). Apri admin > **Lingue**: l'admin la registra in `_config.yml`, `languages.yml`, `ui-text.yml` e corregge `lang`/`permalink` dei file clonati e gli url dei menu, poi la lingua compare nella tabella con "modifica" su ogni pagina. Funziona anche rinominando una cartella esistente (la vecchia lingua senza cartella sparisce dall'elenco). Regola: la CARTELLA e' la fonte di verita'. Nome mostrato e bandiera: vedi i punti 2 sotto.
+
+**Metodo da admin:**
 
 1. Admin > **Lingue** > **Nuova lingua**: scegli `de`, scegli da quale lingua clonare. Crea in un solo commit `de/` con pagine e articoli (`tr: copia`, `ref`, permalink e scope in `_config.yml`).
 2. Se la lingua non e' in `_data/languages.yml`, aggiungila (nome) e metti la bandiera in `assets/images/flags/de.svg`.
@@ -58,7 +62,7 @@ Copia questi file/cartelle, poi cambia solo `_config.yml` (`default_lang`, `lang
 - `_includes/masthead.html`, `_includes/render-blocks.html`, `_includes/head/custom.html`, `_includes/footer/custom.html`
 - `assets/js/menu.js`, `assets/images/flags/`, regole `.lang-switch` in `menu.css`
 - `admin/js/lingue.js` e la voce "Lingue" in `admin/index.html`
-- `automation/traduzioni_sync.py`, `automation/traduci_lingua.py`, `.github/workflows/traduzioni.yml`
+- `automation/traduzioni_sync.py`, `automation/traduci_lingua.py`, `.githooks/pre-commit` (attivo con `git config core.hooksPath .githooks`)
 
 Poi: assicurati che ogni pagina e articolo della lingua base abbia `ref:` (l'admin lo aggiunge da solo quando crei una copia), e che gli elenchi che usano `site.posts` siano filtrati con `where: "lang", page.lang`.
 

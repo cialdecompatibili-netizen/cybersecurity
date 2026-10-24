@@ -1,5 +1,5 @@
-# gamingcorp
+# cybersecurity
 
-La mia azienda di gaming - solo piano, da sviluppare.
+Sito Jekyll su GitHub Pages: https://cialdecompatibili-netizen.github.io/cybersecurity/ (admin: /admin/).
 
-Leggi [piano.md](piano.md).
+Clone di mistraltemplate1 (24/10/2026): per le regole del template vedi CLAUDE.md. Il vecchio stato (clone di gamingcorp) e' nel branch backup-2026-10-24-1.

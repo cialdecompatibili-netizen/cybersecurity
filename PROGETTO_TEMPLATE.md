@@ -1,0 +1,56 @@
+# mistraltemplate1 - progetto template stabile e adattivo
+
+Creata il 24/10/2026. Base: clone di `gamingcorp` (che a sua volta deriva da edilextreme4/renzoferrucci con motore multilingua). Account GitHub `cialdecompatibili-netizen`, cartella `C:\Users\mirco\Desktop\repository\mistraltemplate1`.
+
+## Obiettivo (da Mirco)
+Un template STABILE e ADATTIVO che qualsiasi nuova repo possa prendere, con tutto automatico: si clona, si cambia (quasi) solo la configurazione e il sito si adatta da solo (lingua, URL, brand, menu, shop, date, eta').
+
+## Principi
+- Zero valori fissi nei file: brand, descrizione, lingue, remoto/baseurl, WhatsApp, contatti stanno solo in `_config.yml` (e `_data/`).
+- Software con remoto/baseurl automatici (come italfuni/edilextreme2): nessun URL scritto a mano nei layout.
+- Multilingua automatico: IT alla radice, altre lingue in `/xx/` create dall'admin (voce Lingue), lette dal sito senza codice. Per un clone si cambia solo `languages` e `default_lang`.
+- Nessun plugin fuori da GitHub Pages; build nativa (un push = un deploy).
+- Contenuti a blocchi (`_data/blocks_home.json`), menu da `_data/navigation.yml` + `sottomenu.yml`, tutto gestibile dall'admin.
+- Eta' e anni automatici (`data-eta`, `data-anni-da`), mai scritti a mano.
+- Regole di design: niente bordi laterali colorati su box/citazioni/CTA.
+
+## Cosa c'e' gia' (ereditato da gamingcorp)
+- Motore multilingua FASE 1-3 (config, defaults, i18n, hreflang, selettore con bandiera, admin Lingue, sync `tr: da_aggiornare` via `automation/traduzioni_sync.py` + workflow).
+- Admin in `admin/`, collezioni `_negozio`, `_tour`, `_pages`, `_posts`; ecommerce con ordini smoke test.
+- `template-map.json`, `version.json`.
+
+## Da fare (ordine proposto)
+1. Pulire i contenuti specifici di gaming (brand GamingCorp, `_tour`, `_negozio`, post demo) lasciando struttura e un esempio minimo per tipo.
+2. Rendere `_config.yml` l'unico punto da cambiare: brand, description, languages, default_lang, whatsapp, contact_endpoint, ecommerce on/off.
+3. `url` e `baseurl` automatici (nessun valore fisso in layout, include, JS, admin).
+4. Script `nuovo_sito.ps1`: copia il template in una nuova cartella, git init, imposta brand/lingue, `gh repo create`, push, attiva Pages.
+5. Admin: interruttore Shop/Tour/Blog per attivare o spegnere sezioni senza toccare file.
+6. Aggiornare `CLAUDE.md` (oggi dice ancora edilextreme4) con regole generiche del template.
+7. Provare il template clonandolo su una repo di prova e verificare che si adatti da solo.
+
+## Note
+- Pubblicare con `..\pubblica.ps1` (vedi `..\claude.md`), sempre con `-Files` espliciti.
+- Non aspettare la build dopo il push: Mirco verifica da solo.
+- Prima di modificare JSON: backup, poi rileggere e verificare.
+
+- TRADUZIONI SENZA WORKFLOW: la sync `da_aggiornare` gira con l'hook `.githooks/pre-commit` (locale, a ogni commit); il workflow GitHub Actions e' stato eliminato (serviva lo scope workflow).
+
+## STATO (24/10/2026)
+- FATTO: contenuti gaming rimossi (giochi, _negozio, post, .bak, crea_shop_gaming.py), sostituiti da esempi minimi (post, prodotto e categoria shop); _config.yml unico punto di configurazione con commenti guida; shop spento di default.
+- FATTO: admin senza repo fisso (detectRepo, su dominio personalizzato chiede il repo una volta); publish.py senza percorsi/URL fissi (repo = cartella del file, URL dal remote git); CLAUDE.md riscritto come guida ai cloni.
+- FATTO (24/10/2026): multilingua automatico dalle cartelle (selettore, admin Lingue, lingua di lavoro in admin); punto 4: `..\nuovo_sito.ps1 -Nome x -Brand "X" -Lingue it,en [-Shop] [-Whatsapp N]` copia il template, imposta solo i campi identita' in _config.yml, attiva l'hook (core.hooksPath), crea la repo e Pages.
+- RESTA: punto 5 (interruttori Shop/Tour/Blog nell'admin), punto 7 (prova di clone), commenti guida nei layout/include/JS/CSS ancora da completare, attivare l'hook nei cloni (lo fara' nuovo_sito.ps1).
+
+## PIANO MULTILINGUA 2 (deciso da Mirco 24/10/2026, ordine fisso) - PUNTI 1-3 FATTI il 24/10/2026 (non provati con build Jekyll: controllare online sitemap.xml, hreflang, /en/shop/, redirect da browser in inglese)
+Ispirato a WPML, Polylang, TranslatePress, Weglot. Da sviluppare in quest'ordine:
+1. SEO per lingua: hreflang corretto (solo pagine tradotte), canonical, titolo e meta description per lingua, sitemap per lingua, "copia" = noindex finche' non segnata tradotta.
+2. Slug tradotti per pagine e categorie (es. /en/shop/ invece di /en/negozio/), gestibili da admin; base: automation/permalink_lingue.py + _data/i18n/xx/categorie.yml di renzoferrucci.
+3. Lingua preferita del browser: alla PRIMA visita porta da solo alla lingua del browser (se esiste), ricorda la scelta (localStorage), la scelta manuale col selettore vince sempre, niente redirect per i bot.
+Idee per dopo (non decise): traduzione AI con un tasto, elenco contenuti per lingua cliccabile, editor affiancato, editor stringhe UI, fallback selettore, glossario, export .po/.csv, immagini per lingua.
+
+
+
+## ADMIN CMS - PIANO (24/10/2026)
+- FATTO/IN CORSO oggi: fix categorie sparite (causa: SeoPanel chiamato a livello globale prima del caricamento di seo-panel.js, bloccava lo script; NON chiamare mai SeoPanel fuori da funzioni), date automatiche (created_at/last_modified_at), redirect 301 (redirect/ + admin Redirect).
+- DA FARE oggi, in ordine: SEO articolo di nuovo editabile, commit del lavoro date/redirect, elementi per pagina (10,20,50,100,200,500) in Impostazioni valido per liste admin e frontend, redirect 301 completi, date automatiche.
+- NON OGGI (in pausa, deciso da Mirco): punto 7 = bozze/programmazione, cestino e storico, commit unico + conflitti, immagini WebP, audit SEO, traduzione AI con un tasto, editor stringhe interfaccia.

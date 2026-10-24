@@ -9,8 +9,13 @@ const LG_SKIP = ['404.md', 'categories-redirect.md', 'cat-list.md', 'category-ar
 const LG_DATA = ['navigation.yml', 'sottomenu.yml', 'shop_nav.yml'];
 
 async function lgApi(path, opt) {
-  const r = await fetch('https://api.github.com/repos/' + REPO + '/' + path, Object.assign({ headers: { 'Authorization': 'token ' + tok(), 'Content-Type': 'application/json' } }, opt || {}));
-  if (!r.ok) throw new Error(path + ' -> ' + r.status);
+  // Se fetch stesso fallisce ("Failed to fetch": rete, blocco annunci, token con caratteri strani) dice QUALE chiamata.
+  let r;
+  // NB: path vuoto = la repo stessa. Niente "/" finale: GitHub risponde con un redirect senza header CORS e il
+  // browser lo vede come "Failed to fetch" (era la causa dell'errore "chiamata GitHub "repo" non riuscita").
+  try { r = await fetch('https://api.github.com/repos/' + REPO + (path ? '/' + path : ''), Object.assign({ headers: { 'Authorization': 'token ' + String(tok()).trim(), 'Content-Type': 'application/json' } }, opt || {})); }
+  catch (e) { throw new Error('chiamata GitHub "' + (path || 'repo') + '" non riuscita (' + e.message + '): controlla connessione, estensioni che bloccano, token in admin > Token'); }
+  if (!r.ok) throw new Error(path + ' -> ' + r.status + (r.status === 401 ? ' (token non valido: rifallo in admin > Token)' : r.status === 403 ? ' (limite GitHub o token senza permessi: riprova tra qualche minuto)' : ''));
   return r.json();
 }
 async function lgTree() {
@@ -74,6 +79,13 @@ async function lgLoadDocs() {
   const bm = cfg.match(/^default_lang:\s*(\S+)/m); LG.base = bm ? bm[1].replace(/["']/g, '') : 'it';
   const lm = cfg.match(/^languages:\s*\[([^\]]*)\]/m); LG.langs = lm ? lm[1].split(',').map(s => s.trim().replace(/["']/g, '')).filter(Boolean) : [LG.base];
   if (!LG.langs.includes(LG.base)) LG.langs.unshift(LG.base);
+  // RILEVAMENTO AUTOMATICO: la lingua e' la CARTELLA. Ogni cartella-lingua nella repo (es. "de/" clonata a mano)
+  // diventa una lingua anche se non e' in `languages:` del config; una lingua del config senza piu' cartella
+  // (cartella rinominata/cancellata) sparisce. La registrazione nei file la fa lgNormalizza().
+  const det = lgDetect();
+  LG.orphans = LG.langs.filter(c => c !== LG.base && !det.includes(c));
+  LG.detected = det.filter(c => !LG.langs.includes(c));
+  LG.langs = LG.langs.filter(c => !LG.orphans.includes(c)).concat(LG.detected);
   const lyml = await lgReadPath('_data/languages.yml');
   if (lyml) { const re = /^([a-z-]+):\s*\r?\n\s+name:\s*(.+)$/gm; let m; while ((m = re.exec(lyml))) LG.names[m[1]] = m[2].trim().replace(/["']/g, ''); }
   LG.docs = {};
@@ -85,6 +97,72 @@ async function lgLoadDocs() {
     });
     LG.docs[lang] = {}; loaded.forEach(d => { LG.docs[lang][d.ref] = d; });
   }
+}
+
+// ---- RILEVAMENTO + NORMALIZZAZIONE AUTOMATICA DELLE LINGUE (clono la cartella, rinomino, e' fatta) ----
+// Una lingua = cartella alla radice "xx" o "xx-yy" con index.html / *.md / _posts, oppure _data/i18n/xx/.
+function lgDetect() {
+  const found = {};
+  LG.tree.forEach(f => {
+    let m = f.path.match(/^([a-z]{2}(?:-[a-z]{2})?)\/(?:index\.html$|_posts\/|[^\/]+\.md$)/);
+    if (!m) m = f.path.match(/^_data\/i18n\/([a-z]{2}(?:-[a-z]{2})?)\//);
+    if (m && m[1] !== LG.base) found[m[1]] = 1;
+  });
+  return Object.keys(found);
+}
+// blocco `defaults:` del config per una lingua (lang/locale/layout + permalink articoli /xx/...)
+function lgScope(code) {
+  return '  - scope:\n      path: "' + code + '"\n    values:\n      lang: ' + code + '\n      locale: ' + code + '\n  - scope:\n      path: "' + code + '"\n      type: pages\n    values:\n      layout: single\n  - scope:\n      path: "' + code + '"\n      type: posts\n    values:\n      layout: single\n      permalink: /' + code + '/:categories/:title/\n';
+}
+// Rende coerente con la CARTELLA tutto il resto: config (languages + defaults), languages.yml, ui-text.yml,
+// `lang`/`locale`/`permalink` nel front matter dei file della cartella, url in _data/i18n/xx/.
+// Idempotente: committa SOLO se qualcosa cambia (una sola commit). Ritorna il numero di file aggiornati.
+async function lgNormalizza() {
+  const others = LG.langs.filter(l => l !== LG.base);
+  const entries = [];
+  const put = async (path, content) => { const old = await lgReadPath(path); if (old !== content) entries.push({ path, content }); };
+  const langRe = /^\/([a-z]{2}(?:-[a-z]{2})?)\//;
+  // 1) config: elenco lingue = cartelle reali + blocco defaults per ogni lingua che non ce l'ha
+  let cfg = await lgReadPath('_config.yml');
+  if (cfg) {
+    cfg = cfg.replace(/^languages:.*$/m, 'languages: [' + [LG.base].concat(others).join(', ') + ']');
+    others.forEach(code => { if (!new RegExp('path:\\s*["\']' + code + '["\']').test(cfg)) cfg = cfg.replace(/^(  # LANG-DEFAULTS[^\r\n]*\r?\n)/m, '$1' + lgScope(code)); });
+    await put('_config.yml', cfg);
+  }
+  // 2) nome lingua (selettore) e testi interfaccia (copia del blocco `en:` come punto di partenza)
+  let lyml = await lgReadPath('_data/languages.yml');
+  if (lyml !== null) {
+    others.forEach(code => { if (!new RegExp('^' + code + ':', 'm').test(lyml)) lyml = lyml.replace(/\s+$/, '') + '\n' + code + ':\n  name: ' + (LG.names[code] || code.toUpperCase()) + '\n'; });
+    await put('_data/languages.yml', lyml);
+  }
+  let ui = await lgReadPath('_data/ui-text.yml');
+  if (ui) {
+    others.forEach(code => { if (!new RegExp('^' + code + ':', 'm').test(ui)) { const blk = lgUiBlock(ui, code); if (blk) ui = ui.replace(/\s+$/, '') + '\n\n' + blk; } });
+    await put('_data/ui-text.yml', ui);
+  }
+  // 3) file della cartella: lang/locale e permalink devono dire la lingua della cartella (dopo un clone dicono quella vecchia)
+  for (const code of others) {
+    const files = LG.tree.filter(f => f.path.startsWith(code + '/') && /\.(md|html)$/.test(f.path));
+    await lgPool(files, async f => {
+      const s = lgSplit(await lgText(f.sha)); if (!s.fm) return;
+      let fm = s.fm;
+      if (lgGet(fm, 'lang') !== code) fm = lgSet(fm, 'lang', code);
+      if (lgGet(fm, 'locale') !== code) fm = lgSet(fm, 'locale', code);
+      const pl = lgGet(fm, 'permalink'); const pm = pl.match(langRe);
+      if (pm && pm[1] !== code) fm = lgSet(fm, 'permalink', pl.replace(langRe, '/' + code + '/'));
+      if (fm !== s.fm) entries.push({ path: f.path, content: '---\n' + fm.replace(/\s+$/, '') + '\n---\n' + s.body });
+    }, 6);
+    // 4) url dei menu/blocchi tradotti: /vecchia-lingua/... -> /code/...
+    const dfiles = LG.tree.filter(f => f.path.startsWith('_data/i18n/' + code + '/'));
+    await lgPool(dfiles, async f => {
+      const t = await lgText(f.sha);
+      const n = t.replace(/(url:\s*["']?)\/([a-z]{2}(?:-[a-z]{2})?)\//g, (all, a, l) => (l !== code && (LG.langs.includes(l) || LG.orphans.includes(l) || LG.names[l])) ? a + '/' + code + '/' : all);
+      if (n !== t) entries.push({ path: f.path, content: n });
+    }, 6);
+  }
+  if (!entries.length) return 0;
+  await lgCommit(entries, 'Multilingua: lingue rilevate dalle cartelle registrate (' + others.join(', ') + ')');
+  return entries.length;
 }
 
 function lgStato(lang, ref) {
@@ -127,6 +205,8 @@ function lgAddRef(src) {
 async function lgCommit(entries, message) {
   const tree = [];
   await lgPool(entries, async e => {
+    // e.del = true -> cancella il file (sha:null nella Git Data API)
+    if (e.del) { tree.push({ path: e.path, mode: '100644', type: 'blob', sha: null }); return; }
     const b = await lgApi('git/blobs', { method: 'POST', body: JSON.stringify({ content: e.content, encoding: 'utf-8' }) });
     tree.push({ path: e.path, mode: '100644', type: 'blob', sha: b.sha });
   }, 6);
@@ -170,13 +250,44 @@ async function lgNuova() {
     if (lyml !== null && !new RegExp('^' + code + ':', 'm').test(lyml)) add({ path: '_data/languages.yml', content: lyml.replace(/\s+$/, '') + '\n' + code + ':\n  name: ' + (LG.names[code] || code.toUpperCase()) + '\n' });
     let cfg = await lgReadPath('_config.yml');
     cfg = cfg.replace(/^languages:.*$/m, 'languages: [' + LG.langs.concat([code]).join(', ') + ']');
-    const scope = '  - scope:\n      path: "' + code + '"\n    values:\n      lang: ' + code + '\n      locale: ' + code + '\n  - scope:\n      path: "' + code + '"\n      type: pages\n    values:\n      layout: single\n  - scope:\n      path: "' + code + '"\n      type: posts\n    values:\n      layout: single\n      permalink: /' + code + '/:categories/:title/\n';
+    const scope = lgScope(code); // blocco defaults: stessa funzione usata da lgNormalizza
     cfg = cfg.replace(/^(  # LANG-DEFAULTS[^\r\n]*\r?\n)/m, '$1' + scope);
     add({ path: '_config.yml', content: cfg });
     await lgCommit(entries, 'Multilingua: nuova lingua ' + code + ' clonata da ' + src);
     showMsg('msg-lingue', 'Lingua ' + code + ' creata (' + entries.length + ' file). Il sito si aggiorna tra 1-2 minuti: tutte le pagine sono "copia" da tradurre.', 'ok');
     caricaLingue(true);
   } catch (e) { showMsg('msg-lingue', 'Errore: ' + e.message, 'err'); }
+}
+
+// ELIMINA una lingua: cancella la cartella xx/ e _data/i18n/xx/ e la toglie da config (languages + defaults).
+// Non tocca la lingua base. Una sola commit: se ci ripensi basta ripristinarla da GitHub (Revert).
+async function lgElimina(code) {
+  if (code === LG.base) return showMsg('msg-lingue', 'La lingua base non si elimina.', 'err');
+  if (!confirm('Eliminare la lingua "' + (LG.names[code] || code) + '" (' + code + ')? Si cancellano la cartella ' + code + '/ e i suoi testi.')) return;
+  try {
+    showMsg('msg-lingue', 'Elimino ' + code + '...', 'ok');
+    await lgLoadDocs();
+    const entries = LG.tree.filter(f => f.path.indexOf(code + '/') === 0 || f.path.indexOf('_data/i18n/' + code + '/') === 0).map(f => ({ path: f.path, del: true }));
+    let cfg = await lgReadPath('_config.yml');
+    if (cfg) {
+      const rest = LG.langs.filter(l => l !== code);
+      cfg = cfg.replace(/^languages:.*$/m, 'languages: [' + rest.join(', ') + ']');
+      // toglie i blocchi `- scope: path: "xx"` scritti da lgScope (righe successive indentate di 4+ spazi)
+      cfg = cfg.replace(new RegExp('^  - scope:[ \\t]*\\r?\\n[ ]{6}path:[ \\t]*["\']' + code + '["\'][ \\t]*\\r?\\n(?:[ ]{4,}.*(?:\\r?\\n|$))*', 'mg'), '');
+      entries.push({ path: '_config.yml', content: cfg });
+    }
+    if (!entries.length) throw new Error('niente da eliminare');
+    await lgCommit(entries, 'Multilingua: eliminata lingua ' + code);
+    showMsg('msg-lingue', 'Lingua ' + code + ' eliminata (' + entries.length + ' file). Il sito si aggiorna tra 1-2 minuti.', 'ok');
+    LG.normTried = true;
+    caricaLingue(true);
+  } catch (e) { showMsg('msg-lingue', 'Errore: ' + e.message, 'err'); }
+}
+// CLONA: precompila il modulo "Nuova lingua" con questa lingua come origine
+function lgClona(code) {
+  document.getElementById('lg-src').value = code;
+  const i = document.getElementById('lg-code'); i.value = ''; i.focus();
+  showMsg('msg-lingue', 'Scrivi il codice della nuova lingua (es. de) e premi "Crea lingua": clona da ' + code + '.', 'ok');
 }
 
 async function lgCreaCopia(dst, ref) {
@@ -204,24 +315,32 @@ async function caricaLingue(force) {
   box.innerHTML = '<span style="color:#999">Carico...</span>';
   try {
     await lgLoadDocs();
+    // AUTOMATICO: cartelle-lingua nuove/rinominate/clonate vengono registrate (config, nomi, front matter, url)
+    // una volta per sessione; se e' tutto gia' a posto non committa nulla.
+    if (!LG.normTried) {
+      LG.normTried = true;
+      try {
+        const n = await lgNormalizza();
+        if (n) { await lgLoadDocs(); showMsg('msg-lingue', 'Lingue rilevate dalle cartelle e registrate (' + n + ' file aggiornati). Il sito si aggiorna tra 1-2 minuti.', 'ok'); }
+      } catch (e) { console.warn('lgNormalizza', e); showMsg('msg-lingue', 'Registrazione automatica lingue non riuscita (' + e.message + '). La tabella funziona comunque.', 'err'); }
+    }
     const sel = document.getElementById('lg-src'); sel.innerHTML = LG.langs.map(l => '<option value="' + l + '">' + lgEsc(LG.names[l] || l) + ' (' + l + ')</option>').join('');
     document.getElementById('lg-codes').innerHTML = Object.keys(LG.names).filter(k => !LG.langs.includes(k)).map(k => '<option value="' + k + '">' + lgEsc(LG.names[k]) + '</option>').join('');
-    const refs = []; const baseDocs = Object.values(LG.docs[LG.base]);
-    ['home', 'page', 'post'].forEach(k => baseDocs.filter(d => d.kind === k).forEach(d => refs.push(d)));
-    const col = { originale: ['#2e7d32', 'Originale'], tradotto: ['#2e7d32', 'Tradotto'], da_aggiornare: ['#b26a00', 'Da aggiornare'], copia: ['#c62828', 'Copia da tradurre'], manca: ['#999', 'Manca'] };
-    let h = '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr><th style="text-align:left;padding:6px">Contenuto</th>' + LG.langs.map(l => '<th style="padding:6px">' + lgEsc(LG.names[l] || l) + '</th>').join('') + '</tr>';
-    refs.forEach(b => {
-      h += '<tr style="border-top:1px solid #eee"><td style="padding:6px">' + (b.kind === 'post' ? 'Articolo: ' : b.kind === 'home' ? 'Home: ' : 'Pagina: ') + lgEsc(b.title) + '</td>';
-      LG.langs.forEach(l => {
-        const s = lgStato(l, b.ref); const d = LG.docs[l][b.ref]; const c = col[s];
-        let a = '<span style="color:' + c[0] + ';font-weight:600">' + c[1] + '</span>';
-        if (d) a += ' <a href="https://github.com/' + REPO + '/edit/' + LG.branch + '/' + d.path + '" target="_blank" style="font-size:11px">modifica</a>';
-        if (l !== LG.base && (s === 'copia' || s === 'da_aggiornare')) a += ' <button class="btn btn-secondary btn-sm" onclick="lgSegna(\'' + l + '\',\'' + b.ref.replace(/'/g, "\\'") + '\')">Segna tradotto</button>';
-        if (l !== LG.base && s === 'manca') a += ' <button class="btn btn-secondary btn-sm" onclick="lgCreaCopia(\'' + l + '\',\'' + b.ref.replace(/'/g, "\\'") + '\')">Crea copia</button>';
-        h += '<td style="padding:6px;text-align:center">' + a + '</td>';
-      });
-      h += '</tr>';
+    // ELENCO LINGUE (una riga per lingua = una cartella): bandiera, nome, avanzamento traduzioni, Clona, Elimina.
+    // Bandiera: assets/images/flags/xx.svg (se manca il file l'immagine si nasconde da sola).
+    const baseRefs = Object.values(LG.docs[LG.base]).filter(d => ['home', 'page', 'post'].includes(d.kind));
+    let h = '<div style="display:flex;flex-direction:column;gap:8px">';
+    LG.langs.forEach(l => {
+      const isBase = l === LG.base;
+      const ok = isBase ? baseRefs.length : baseRefs.filter(b => lgStato(l, b.ref) === 'tradotto').length;
+      const stato = isBase ? 'Lingua base (alla radice)' : ok + ' / ' + baseRefs.length + ' contenuti tradotti';
+      h += '<div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid #e5e5e5;border-radius:6px;flex-wrap:wrap">'
+        + '<img src="../assets/images/flags/' + lgEsc(l) + '.svg" alt="" style="width:28px;height:20px;object-fit:cover;border-radius:2px" onerror="this.style.display=\'none\'">'
+        + '<div style="flex:1;min-width:140px"><strong>' + lgEsc(LG.names[l] || l) + '</strong> <span style="color:#888">(' + lgEsc(l) + ')</span><div style="font-size:12px;color:#777">' + lgEsc(stato) + '</div></div>'
+        + '<button class="btn btn-secondary btn-sm" onclick="lgClona(\'' + l + '\')">Clona</button>'
+        + (isBase ? '' : ' <button class="btn btn-secondary btn-sm" style="color:#c62828" onclick="lgElimina(\'' + l + '\')">Elimina</button>')
+        + '</div>';
     });
-    box.innerHTML = h + '</table></div>';
+    box.innerHTML = h + '</div>';
   } catch (e) { box.innerHTML = '<span style="color:#c62828">Errore: ' + lgEsc(e.message) + '</span>'; }
 }

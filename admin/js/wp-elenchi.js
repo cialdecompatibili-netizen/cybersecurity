@@ -13,11 +13,14 @@ function thumb(u){if(!u||/\{\{|\{%/.test(u))return '';return /^(https?:)?\/\//.t
 function fmOf(raw){const m=raw.replace(/\r\n/g,'\n').match(/^---\n([\s\S]*?)\n---/);return m?m[1]:'';}
 function gv(f,k){const x=f.match(new RegExp('^'+k+':[ \\t]*"?(.*?)"?[ \\t]*$','m'));return x?x[1].replace(/\\"/g,'"'):'';}
 
-// Elenco generico: ricerca, paginazione, miniature caricate a pagina.
+// Le miniature/metadati si leggono a gruppi di 6 richieste alla volta (con 200-500 voci per pagina non si sparano tutte insieme: limite API GitHub).
+async function metaQueue(arr,fn){const q=arr.slice();await Promise.all(Array.from({length:Math.min(6,q.length)},async()=>{while(q.length){await fn(q.shift());}}));}
+
+// Elenco generico: ricerca, paginazione (voci per pagina = Impostazioni > Elementi per pagina), miniature caricate a pagina.
 function lista(c){
   const S={files:c.files,q:'',pg:0,meta:{}}, el=$(c.el);
   el.innerHTML='<input type="search" class="wp-search" placeholder="'+h(c.ph)+'"><div class="wp-tab"></div><div class="wp-pag"></div>';
-  const inp=el.querySelector('input'), tab=el.querySelector('.wp-tab'), pag=el.querySelector('.wp-pag'), PP=c.pp||20;
+  const inp=el.querySelector('input'), tab=el.querySelector('.wp-tab'), pag=el.querySelector('.wp-pag'), PP=(window.getPerPage?getPerPage():(c.pp||20));
   function filt(){const t=S.q.toLowerCase().trim();return S.files.filter(f=>!t||(f.name+' '+((S.meta[f.path]||{}).title||'')).toLowerCase().includes(t));}
   function draw(){
     const L=filt(), np=Math.max(1,Math.ceil(L.length/PP)); if(S.pg>=np)S.pg=np-1;
@@ -25,7 +28,7 @@ function lista(c){
     tab.innerHTML='<table class="wp-list"><thead><tr>'+c.heads.map(x=>'<th'+(x===''?' class="wp-th"':'')+'>'+x+'</th>').join('')+'</tr></thead><tbody>'+(S.q?'':(c.pre||''))+P.map(f=>'<tr data-p="'+h(f.path)+'">'+c.row(f,S.meta[f.path]||null)+'</tr>').join('')+(!P.length&&S.q?'<tr><td colspan="'+c.heads.length+'">Nessun risultato.</td></tr>':'')+'</tbody></table>';
     pag.innerHTML='<span class="hint">'+L.length+(L.length===1?' elemento':' elementi')+'</span>'+(np>1?'<button class="btn btn-secondary btn-sm" '+(S.pg?'':'disabled')+' data-d="-1">‹</button><span>Pagina '+(S.pg+1)+' di '+np+'</span><button class="btn btn-secondary btn-sm" '+(S.pg<np-1?'':'disabled')+' data-d="1">›</button>':'');
     pag.querySelectorAll('button').forEach(b=>b.onclick=()=>{S.pg+=+b.dataset.d;draw();});
-    P.filter(f=>!S.meta[f.path]).forEach(async f=>{
+    metaQueue(P.filter(f=>!S.meta[f.path]),async f=>{
       let m={};
       try{const r=await ghGet(f.path);if(r.ok){m=c.meta(dec((await r.json()).content));}}catch(e){}
       S.meta[f.path]=m;
@@ -59,7 +62,7 @@ window.caricaPagine=async function(){
   if(!tok())return; const el=$('lista-pagine'); if(!el)return;
   let res; try{res=await ghGet('_pages');}catch(e){return;} if(!res.ok)return;
   const sys=typeof PAGINE_SISTEMA!=='undefined'?PAGINE_SISTEMA:[];
-  const files=(await res.json()).filter(f=>f.type==='file'&&/\.(md|html)$/.test(f.name)&&!sys.includes(f.name)).sort((a,b)=>a.name.localeCompare(b.name));
+  const files=(await res.json()).filter(f=>f.type==='file'&&/\.(md|html)$/.test(f.name)&&!sys.includes(f.name)&&f.name!=='index.html').sort((a,b)=>a.name.localeCompare(b.name));
   lista({el:'lista-pagine',files,ph:'Cerca pagine',heads:['Titolo','Indirizzo'],pp:30,
     pre:'<tr><td><a class="wp-t" onclick="modificaPaginaBox(\'home\',null)">Home</a> <span class="wp-n">— pagina principale</span><div class="wp-ra"><a onclick="modificaPaginaBox(\'home\',null)">Modifica</a> | <a href="'+BASE+'" target="_blank" rel="noopener">Visualizza</a></div></td><td class="wp-n">/</td></tr>',
     meta:raw=>{const f=fmOf(raw);return {title:gv(f,'title'),perm:gv(f,'permalink')};},

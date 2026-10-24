@@ -80,7 +80,7 @@
 
       <div class="nv__panel" id="nv-panel">
         <ul class="nv__list">
-          {%- for item in nv_items -%}
+          {%- for item in nv_items -%}{%- if item.title == 'Shop' and site.ecommerce != true -%}{%- continue -%}{%- endif -%}
             {%- assign u = item.url | default: '#' -%}
 
             {%- comment -%} 1) costruisco le voci della tendina (se ce ne sono) {%- endcomment -%}
@@ -129,16 +129,17 @@
             Strumenti a destra: ricerca del tema (+ carrello inserito da head/custom.html).
             Togli questo <li> per eliminare la lente. Il carrello sparisce con lei (si appoggia qui).
           {%- endcomment -%}
-          {%- if site.languages.size > 0 -%}
-          {%- comment -%} SELETTORE LINGUA: bandiera + tendina. Lingua corrente e link alle traduzioni sono calcolati da assets/js/menu.js (il masthead e' in cache). {%- endcomment -%}
+          {%- include lingue-attive.html -%}
+          {%- if lg_arr.size > 1 -%}
+          {%- comment -%} SELETTORE LINGUA (lingue rilevate dalle cartelle, vedi _includes/lingue-attive.html): bandiera + tendina. Lingua corrente e link alle traduzioni sono calcolati da assets/js/menu.js (il masthead e' in cache). {%- endcomment -%}
           <li class="nv__item nv__item--dd nv__item--lang" data-lang-base="{{ site.baseurl }}" data-lang-default="{{ site.default_lang }}">
             <button class="nv__link nv__link--dd nv__lang-btn" type="button" data-nv-dropdown-toggle aria-haspopup="true" aria-expanded="false" aria-label="Lingua / Language">
               <img class="nv__flag" data-lang-current src="{{ '/assets/images/flags/' | append: site.default_lang | append: '.svg' | relative_url }}" alt="" width="22" height="16"><span class="nv__lang-code" data-lang-code>{{ site.default_lang | upcase }}</span>
             </button>
             <div class="nv__dd nv__dd--lang">
-              {%- for l in site.languages -%}
+              {%- for l in lg_arr -%}
                 {%- if l == site.default_lang -%}{%- assign lh = '/' | relative_url -%}{%- else -%}{%- assign lh = '/' | append: l | append: '/' | relative_url -%}{%- endif -%}
-                <a class="nv__dd-item nv__lang-item" data-lang="{{ l }}" href="{{ lh }}" hreflang="{{ l }}"><img class="nv__flag" src="{{ '/assets/images/flags/' | append: l | append: '.svg' | relative_url }}" alt="" width="22" height="16"><span>{{ site.data.languages[l].name | default: l }}</span></a>
+                <a class="nv__dd-item nv__lang-item" data-lang="{{ l }}" href="{{ lh }}" hreflang="{{ l }}"><img class="nv__flag" src="{{ '/assets/images/flags/' | append: l | append: '.svg' | relative_url }}" alt="" width="22" height="16" onerror="this.style.display='none'"><span>{{ site.data.languages[l].name | default: l }}</span></a>
               {%- endfor -%}
             </div>
           </li>
@@ -153,10 +154,10 @@
         </ul>
       </div>
       {%- if site.ecommerce == true -%}
-      {%- capture nz_cat -%}{%- for b in site.data.catalogo.prodotti -%}{%- unless b.visibile == false -%}{"id":{{ b.id | jsonify }},"p":{{ b.prezzo_centesimi | default: 0 | jsonify }},"n":{{ b.nome | jsonify }},"t":{{ b.tipo | default: 'fisico' | jsonify }},"u":{{ '/negozio/' | append: b.id | append: '/' | relative_url | jsonify }},"i":{% if b.immagine and b.immagine != '' %}{% if b.immagine contains '://' %}{{ b.immagine | jsonify }}{% else %}{{ '/' | append: b.immagine | relative_url | jsonify }}{% endif %}{% else %}""{% endif %},"e":{{ b.icona | default: '' | jsonify }}},{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+      {%- capture nz_cat -%}{%- for b in site.data.catalogo.prodotti -%}{%- unless b.visibile == false -%}{"id":{{ b.id | jsonify }},"p":{{ b.prezzo_centesimi | default: 0 | jsonify }},"n":{{ b.tr[lg].nome | default: b.nome | jsonify }},"t":{{ b.tipo | default: 'fisico' | jsonify }},"u":{{ lg_home | append: 'negozio/' | append: b.id | append: '/' | relative_url | jsonify }},"i":{% if b.immagine and b.immagine != '' %}{% if b.immagine contains '://' %}{{ b.immagine | jsonify }}{% else %}{{ '/' | append: b.immagine | relative_url | jsonify }}{% endif %}{% else %}""{% endif %},"e":{{ b.icona | default: '' | jsonify }}},{%- endunless -%}{%- endfor -%}{%- endcapture -%}
       <div class="nv__cart nv__cart--nz">
       <div class="nz-cartw">
-                <a id="nz-cart" class="nz-cart" href="{{ '/carrello/' | relative_url }}" data-catalogo="{{ nz_cat | escape }}" aria-label="Carrello">
+                <a id="nz-cart" class="nz-cart" href="{{ lg_home | append: 'carrello/' | relative_url }}" data-catalogo="{{ nz_cat | escape }}" aria-label="Carrello">
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h2.6l2.3 11.2a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.2l1.5-6.8H6"/></svg>
                   <span class="nz-n">(0)</span>
                 </a>
@@ -164,7 +165,7 @@
               </div>
       </div>
       {%- else -%}
-      <a class="nv__cart" href="{{ lg_home | append: 'shop/' | relative_url }}" aria-label="{% if lg == 'en' %}Cart{% else %}Carrello{% endif %}">
+      <a class="nv__cart" href="{{ lg_home | append: 'carrello/' | relative_url }}" aria-label="{% if lg == 'en' %}Cart{% else %}Carrello{% endif %}">
         <svg class="nv__ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
       </a>
       {%- endif -%}

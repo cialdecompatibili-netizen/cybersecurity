@@ -234,9 +234,10 @@ tr:hover td{background:#f0f6fc}
         <button class="btn btn-primary" onclick="lgNuova()">Crea lingua</button>
         <div id="msg-lingue" class="msg"></div>
       </div>
+      <!-- ELENCO LINGUE: lo riempie lingue.js (caricaLingue) leggendo le CARTELLE della repo. NON togliere #lg-tab. -->
       <div class="card">
-        <div class="card-title" style="display:flex;justify-content:space-between">Stato traduzioni <button class="btn btn-secondary btn-sm" onclick="caricaLingue(true)">&#8635; Aggiorna</button></div>
-        <div id="lg-tab"><span style="color:#bbb;font-size:13px">Apri la voce per caricare</span></div>
+        <div class="card-title" style="display:flex;justify-content:space-between">Lingue presenti <button class="btn btn-secondary btn-sm" onclick="caricaLingue(true)">&#8635; Aggiorna</button></div>
+        <div id="lg-tab"><span style="color:#bbb;font-size:13px">Carico...</span></div>
       </div>
     </div>
 
@@ -258,7 +259,7 @@ tr:hover td{background:#f0f6fc}
         <div class="card-title" id="art-editor-title">Nuovo articolo</div>
         <div class="field"><label>Titolo *</label><input type="text" id="titolo" placeholder="Titolo dell'articolo"></div>
         <div class="grid2">
-          <div class="field"><label>Data</label><input type="date" id="data"></div>
+          <input type="hidden" id="data">
           <div class="field">
             <label>Categoria *</label>
             <select id="categorie"><option value="">— Seleziona —</option></select>
@@ -273,7 +274,7 @@ tr:hover td{background:#f0f6fc}
             </div>
           </div>
         </div>
-        <div class="field"><label>Excerpt SEO</label><input type="text" id="excerpt" placeholder="Descrizione breve per Google (max 160 caratteri)"></div>
+        <input type="hidden" id="excerpt">
         <div class="field">
           <label>Contenuto</label>
           <div class="editor-toggle">
@@ -301,6 +302,7 @@ tr:hover td{background:#f0f6fc}
           </div>
           <textarea class="md" id="corpo" placeholder="HTML grezzo..." style="display:none"></textarea>
         </div>
+        <div id="seo-art"></div>
         <div class="btn-group">
           <button class="btn btn-primary" onclick="pubblica()">🚀 Pubblica</button>
           <button class="btn btn-secondary btn-sm" onclick="anteprima()">👁 Anteprima</button>
@@ -336,7 +338,7 @@ tr:hover td{background:#f0f6fc}
           <input type="text" id="pag-permalink" placeholder="/nome-pagina/">
         </div>
         <div class="field"><label>Titolo</label><input type="text" id="pag-titolo"></div>
-        <div class="field"><label>Descrizione SEO <span style="font-weight:400;color:#bbb">(opzionale — appare nei risultati Google)</span></label><input type="text" id="pag-description" placeholder="Breve descrizione della pagina..."></div>
+        <input type="hidden" id="pag-description">
         <div class="field">
           <label>Sezioni della pagina</label>
           <div id="lista-pag-blocchi"><span style="color:#bbb;font-size:13px">Caricamento...</span></div>
@@ -351,6 +353,7 @@ tr:hover td{background:#f0f6fc}
             <button class="btn btn-secondary btn-sm" onclick="copiaUrlPagina()">📋 Copia</button>
           </div>
         </div>
+        <div id="seo-pag"></div>
         <div class="btn-group">
           <button class="btn btn-primary" onclick="salvaPagina()">💾 Salva</button>
           <button class="btn btn-secondary" onclick="anteprimaPagina()">👁 Anteprima live</button>
@@ -528,9 +531,9 @@ tr:hover td{background:#f0f6fc}
       <div class="card">
         <div class="card-title">Visualizzazione liste</div>
         <div class="field">
-          <label>Prodotti per pagina <span style="font-weight:400;color:#bbb">(lista nella tab Prodotti)</span></label>
-          <input type="number" id="cfg-limite-prodotti" min="1" placeholder="50" onchange="setLimiteProdotti(this.value)">
-          <div class="hint">Quante righe mostrare prima di far comparire le frecce ← Precedente / Successiva →. Salvato solo su questo browser (non sincronizzato tra dispositivi).</div>
+          <label>Elementi per pagina <span style="font-weight:400;color:#bbb">(admin e sito: articoli, pagine, prodotti, blog, negozio)</span></label>
+          <select id="cfg-per-page" onchange="setPerPage(this.value)"><option>10</option><option>20</option><option>50</option><option>100</option><option>200</option><option>500</option></select>
+          <div class="hint">Quante voci mostrare prima della paginazione. Nell'admin vale subito; sul sito dopo "Salva" (chiave per_page di _config.yml). Con 200-500 le miniature dell'admin si caricano a gruppi.</div>
         </div>
       </div>
 
@@ -735,6 +738,7 @@ tr:hover td{background:#f0f6fc}
         </div>
         <div class="field"><label>Descrizione breve <span class="hint" style="display:inline">max 160 caratteri — mostrata nella lista categoria</span></label><input type="text" id="prod-description" placeholder="Breve descrizione del prodotto..."></div>
         <div class="field"><label>Descrizione completa</label><textarea class="sm" id="prod-corpo" placeholder="Descrizione lunga del prodotto..."></textarea></div>
+        <div id="seo-prod"></div>
         <div class="btn-group">
           <button class="btn btn-primary" onclick="pubblicaProdotto()">🚀 Salva prodotto</button>
         </div>
@@ -796,6 +800,16 @@ tr:hover td{background:#f0f6fc}
 // ~840  tok()/enc()/dec()       — token localStorage + base64 UTF-8 safe (MAI btoa/atob diretti)
 // ~844  ghGet()/ghPut()         — helper GitHub API contenuti (sha obbligatorio per update, mai '')
 // ~886  SELETTORE IMMAGINI      — apriSelettoreImmagini(), galleria+upload+elimina, riutilizzabile
+// ===== GUIDA-SVILUPPO: REGOLE PER NON ROMPERE L'ADMIN (errori gia' fatti) =====
+// 1) Questo script INLINE gira PRIMA dei file js/*.js (si caricano in fondo alla pagina).
+//    Mai chiamare SeoPanel, Auto, RD, FOTOLIB... a livello globale: solo dentro funzioni (eseguite dopo il caricamento).
+//    Un solo ReferenceError qui blocca TUTTO quello che segue (e' successo: categorie sparite).
+// 2) Dopo ogni modifica: node automation/test_admin.js (simula l'admin con dati finti e segnala gli errori di caricamento).
+// 3) window.onload (in fondo) e' l'unico punto di avvio: non ridefinirlo in altri file js, usare addEventListener.
+// 4) Le funzioni qui sotto possono essere RIDEFINITE da js/wp-elenchi.js, js/lingua-admin.js (caricaLista, renderCategorie,
+//    fetch): se una lista "non si comporta come scritto qui", guardare li'.
+// 5) Con una lingua diversa dalla base (selettore in alto) lingua-admin.js rimappa i path di Articoli/Pagine/Menu.
+// ============================================================================
 // ~977  caricaCategorie()       — legge _data/categorie.json (articoli)
 // ~1343 ARTICOLI                — pubblicaArticolo(), editor visuale/HTML, TOC, teaser image
 // ~1806 SHOP CATEGORIE          — _data/shop-categorie.json, aggiungiCatShop()/eliminaCatShop()
@@ -822,7 +836,13 @@ function detectRepo(){
   const h=location.hostname; // es. pippo.github.io
   const p=location.pathname; // es. /miosito/admin/index.html
   const match=h.match(/^([^.]+)\.github\.io$/);
-  if(!match)return localStorage.getItem('cms_repo')||'cialdecompatibili-netizen/edilextreme4'; // dominio personalizzato (edilextreme.com): repo di default
+  // TEMPLATE: nessun repo scritto a mano. Su dominio personalizzato (non *.github.io) il repo
+  // "utente/nome" si chiede UNA volta e resta in localStorage (chiave cms_repo).
+  if(!match){
+    let r=localStorage.getItem('cms_repo');
+    if(!r){ r=(prompt('Dominio personalizzato: scrivi il repo GitHub (utente/nome-repo)')||'').trim(); if(r)localStorage.setItem('cms_repo',r); }
+    return r||'';
+  }
   const user=match[1];
   const parts=p.split('/').filter(Boolean); // ['miosito','admin','index.html']
   // Se il primo segmento NON è 'admin' è il nome del repo
@@ -1377,7 +1397,7 @@ function renderPagBlocchi(){
 function pagBlockSu(i){if(i===0)return;var t=_pagBlocchi.splice(i,1)[0];_pagBlocchi.splice(i-1,0,t);renderPagBlocchi();}
 function pagBlockGiu(i){if(i===_pagBlocchi.length-1)return;var t=_pagBlocchi.splice(i,1)[0];_pagBlocchi.splice(i+1,0,t);renderPagBlocchi();}
 function aggiungiPagBlocco(){
-  _pagBlocchi.push({id:'box'+Date.now(),nome:'Nuovo box',enabled:true,html:'<section style="padding:40px;text-align:center">\n  <h2>Nuovo box</h2>\n  <p>Scrivi qui il tuo HTML.</p>\n</section>'});
+  _pagBlocchi.push({id:'box'+Date.now(),nome:'Nuovo box',enabled:true,html:'<h2>Nuovo box</h2>\n<p>Scrivi qui il tuo HTML.</p>'});
   renderPagBlocchi();
 }
 
@@ -1433,9 +1453,9 @@ async function modificaPaginaBox(slug,path){
   document.getElementById('nome-pagina').textContent=slug==='home'?'Home':slug;
   document.getElementById('msg-pag').style.display='none';
   showMsg('msg-pag','Caricamento...','');document.getElementById('msg-pag').style.display='block';
-  window._paginaFrontmatter='';
+  window._paginaPermOld='';window._paginaFrontmatter='';
   document.getElementById('pag-titolo').value=slug==='home'?'Home':'';
-  document.getElementById('pag-description').value='';
+  document.getElementById('pag-description').value=''; SeoPanel.set('seo-pag',{});
   if(path){
     const resPag=await ghGet(path);
     if(resPag.ok){
@@ -1445,9 +1465,9 @@ async function modificaPaginaBox(slug,path){
       const fm=content.match(/^---\n([\s\S]*?)\n---/);
       const titleMatch=(fm?fm[1]:'').match(/title:\s*"?([^"\n]+)"?/);
       const descMatch=(fm?fm[1]:'').match(/description:\s*"?([^"\n]+)"?/);
-      window._paginaFrontmatter=fm?fm[0]+'\n':'';
+      window._paginaFrontmatter=fm?fm[0]+'\n':'';if(slug!=='home'){const _pm=(fm?fm[1]:'').match(/^permalink:\s*"?([^"\n]+?)"?\s*$/m);window._paginaPermOld=_pm?_pm[1].trim():'';document.getElementById('pag-permalink').value=window._paginaPermOld;document.getElementById('pag-permalink-field').style.display='block';}
       document.getElementById('pag-titolo').value=titleMatch?titleMatch[1].trim():'';
-      document.getElementById('pag-description').value=descMatch?descMatch[1].trim():'';
+      document.getElementById('pag-description').value=descMatch?descMatch[1].trim():''; {const _s=SeoPanel.read(fm?fm[1]:'');if(!_s.seo_description)_s.seo_description=descMatch?descMatch[1].trim():'';SeoPanel.set('seo-pag',_s);}
     }
   }
   const resBlk=await ghGet(_pagBlocchiFile);
@@ -1487,24 +1507,19 @@ async function salvaPagina(){
       let content;
       if(fm){
         fm=fm.replace(/title:\s*"[^"]*"/,'title: "'+titolo+'"');
-        if(desc){
-          if(/description:/.test(fm)) fm=fm.replace(/description:\s*"?[^"\n]+"?/,'description: "'+desc+'"');
-          else fm=fm.replace(/^---\n/,'---\ndescription: "'+desc+'"\n');
-        } else {
-          fm=fm.replace(/description:\s*"?[^"\n]+"?\n?/g,'');
-        }
+        fm=fm.replace(/^description:.*\n?/gm,'');fm=SeoPanel.patch(fm,'seo-pag');let _np=((document.getElementById('pag-permalink')||{}).value||'').trim();window._paginaPermNew='';if(_np){_np=Auto.normPath(_np);if(window.ADM&&ADM.lang&&ADM.lang!==ADM.base&&!_np.startsWith('/'+ADM.lang+'/'))_np='/'+ADM.lang+_np;if(/^permalink:/m.test(fm))fm=fm.replace(/^permalink:.*$/m,'permalink: '+_np);else fm=fm.replace(/\n?---\s*$/,'\npermalink: '+_np+'\n---');window._paginaPermNew=_np;}fm=Auto.stamp(fm,true);
         content=fm.trimEnd()+'\n\n{% include render-blocks.html data="blocks_'+slugAttuale+'" %}';
       } else {
         const permalinkInput=document.getElementById('pag-permalink');
         const permalink=(permalinkInput&&permalinkInput.value.trim())||'/'+slugAttuale+'/';
-        content='---\nlayout: single\ntitle: "'+titolo+'"'+(desc?'\ndescription: "'+desc+'"':'')+'\npermalink: '+permalink+'\nauthor_profile: true\n---\n\n{% include render-blocks.html data="blocks_'+slugAttuale+'" %}';
+        content='---\nlayout: single\ntitle: "'+titolo+'"'+(desc?'\ndescription: "'+desc+'"':'')+'\npermalink: '+permalink+'\nauthor_profile: true\n'+SeoPanel.lines('seo-pag')+'created_at: '+Auto.nowIso()+'\nlast_modified_at: '+Auto.nowIso()+'\n---\n\n{% include render-blocks.html data="blocks_'+slugAttuale+'" %}';
       }
       _paginaPath=_paginaPath||('_pages/'+slugAttuale+'.md');
       const resPag=await ghPut(_paginaPath,'Aggiorna pagina: '+titolo,content,_paginaSha||undefined);
       const jPag=await resPag.json();
       clearInterval(timer);
       if(!resPag.ok)return showMsg('msg-pag',(jPag.message||'Errore pagina'),'err');
-      _paginaSha=jPag.content.sha;
+      _paginaSha=jPag.content.sha;if(window._paginaPermOld&&window._paginaPermNew&&window._paginaPermOld!==window._paginaPermNew){RD.add(window._paginaPermOld,window._paginaPermNew).then(ok=>{if(!ok)showMsg('msg-pag','\u26A0\uFE0F Salvata, ma il redirect dal vecchio indirizzo non e\' stato creato: aggiungilo in Redirect.','err');});window._paginaPermOld=window._paginaPermNew;}
     } else {
       clearInterval(timer);
     }
@@ -1553,7 +1568,7 @@ function tornaPagine(){
 }
 function apriNuovaPagina(){
   _paginaPath=null;_paginaSha=null;_pagBlocchiSha=null;_pagBlocchiFile=null;
-  window._paginaSlug=null;window._paginaFrontmatter='';
+  window._paginaSlug=null;window._paginaFrontmatter='';window._paginaPermOld='';
   _pagBlocchi=[{id:'main',nome:'Contenuto',enabled:true,html:'<section style="padding:40px;text-align:center">\n  <h2>Nuova pagina</h2>\n  <p>Scrivi qui il tuo contenuto.</p>\n</section>'}];
   document.getElementById('pag-titolo').value='';
   document.getElementById('pag-permalink').value='';
@@ -1575,11 +1590,12 @@ function tornaListaArticoli(){
   document.getElementById('art-lista-view').style.display='block';
   caricaLista();
 }
+function oggiLocale(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function apriNuovoArticolo(){
-  ['titolo','excerpt','teaser','tags','corpo'].forEach(id=>document.getElementById(id).value='');
+  ['titolo','excerpt','teaser','tags','corpo'].forEach(id=>document.getElementById(id).value=''); SeoPanel.set('seo-art',{});window._editExtra='';window._editCat0='';
   document.getElementById('categorie').value='';
   document.getElementById('vis-editor').innerHTML='';
-  document.getElementById('data').value=new Date().toISOString().split('T')[0];
+  document.getElementById('data').value=oggiLocale();
   document.getElementById('preview-box').style.display='none';
   document.getElementById('msg-art').style.display='none';
   document.getElementById('art-editor-title').textContent='Nuovo articolo';
@@ -1591,14 +1607,16 @@ function apriNuovoArticolo(){
 function nuovoArticolo(){apriNuovoArticolo();}
 function buildContent(){
   const titolo=document.getElementById('titolo').value.trim();
-  const data=document.getElementById('data').value;
+  let data=document.getElementById('data').value;
+  // Mai data vuota o futura: Jekyll nasconde i post con data futura (il sito "sparisce" l'articolo)
+  if(!data||data>oggiLocale()){data=oggiLocale();document.getElementById('data').value=data;}
   let cat=document.getElementById('categorie').value;
   const tags=document.getElementById('tags').value.split(',').map(s=>s.trim()).filter(Boolean);
-  const excerpt=document.getElementById('excerpt').value.trim();
+  const _sv=SeoPanel.get('seo-art');const excerpt=(_sv.seo_description||'').replace(/"/g,'\\"');
   const teaser=document.getElementById('teaser').value.trim();
   const corpo=getCorpo();
   let fm=`---\nlayout: single\ntitle: "${titolo}"\ndate: ${data}\n`;
-  if(excerpt)fm+=`excerpt: "${excerpt}"\n`;
+  if(excerpt)fm+=`excerpt: "${excerpt}"\n`; fm+=SeoPanel.lines('seo-art');fm+='last_modified_at: '+Auto.nowIso()+'\n';fm+=(window._editExtra||'');
   if(teaser)fm+=`header:\n  teaser: "${teaser}"\n`;
   if(cat)fm+=`categories:\n  - ${cat}\n`;
   if(tags.length)fm+=`tags:\n${tags.map(t=>`  - ${t}`).join('\n')}\n`;
@@ -1641,10 +1659,10 @@ async function modificaArticolo(path){
   const get=(k)=>{const m=(fm?fm[1]:'').match(new RegExp(`${k}:\\s*"?([^"\\n]+)"?`));return m?m[1].trim():'';}
   document.getElementById('titolo').value=get('title');
   document.getElementById('data').value=get('date');
-  document.getElementById('excerpt').value=get('excerpt');
+  document.getElementById('excerpt').value=get('excerpt'); {const _s=SeoPanel.read(fm?fm[1]:'');if(!_s.seo_description)_s.seo_description=get('excerpt');SeoPanel.set('seo-art',_s);}window._editExtra=Auto.extra(fm?fm[1]:'');
   document.getElementById('teaser').value=get('teaser')||'';
   const catM=(fm?fm[1]:'').match(/categories:\n\s*-\s*(.+)/);
-  if(catM)document.getElementById('categorie').value=catM[1].trim();
+  if(catM)document.getElementById('categorie').value=catM[1].trim();window._editCat0=catM?catM[1].trim():'';
   const tagsM=(fm?fm[1]:'').match(/tags:\n([\s\S]*?)(?=\n\w|\n---)/);
   if(tagsM)document.getElementById('tags').value=tagsM[1].replace(/\s*-\s*/g,'').trim().split('\n').join(', ');
   // Carica corpo: HTML diretto, niente conversioni
@@ -1673,7 +1691,7 @@ async function pubblica(){
     if(!corpo)return showMsg('msg-art','⚠️ Scrivi il contenuto!','err');
     const data=document.getElementById('data').value;
     if(!data)return showMsg('msg-art','⚠️ Data mancante!','err');
-    const filename=window._editPath||`_posts/${data}-${slugify(titolo)}.html`;
+    const filename=window._editPath||`_posts/${data}-${slugify(titolo)}.html`; const _rdOld=window._editPath?{p:window._editPath,c:window._editCat0||''}:null;
     showMsg('msg-art','⏳ Pubblicazione in corso...','ok');
     const contenuto=buildContent();
     const body={message:`${window._editSha?'Aggiorna':'Nuovo'} articolo: ${titolo}`,content:enc(contenuto)};
@@ -1685,7 +1703,7 @@ async function pubblica(){
     clearInterval(timer);
     const json=await res.json();
     if(res.ok){
-      window._editSha=null;window._editPath=null;
+      if(_rdOld)Auto.articolo(_rdOld.p,_rdOld.c,cat); window._editSha=null;window._editPath=null;
       showMsg('msg-art','✅ Pubblicato! Torno alla lista...','ok');
       startDeployPolling();
       setTimeout(()=>tornaListaArticoli(),1200);
@@ -1845,7 +1863,8 @@ async function caricaImpostazioni(){
   document.getElementById('cfg-author-name').value=get('  name','');
   document.getElementById('cfg-bio').value=get('  bio','');
   document.getElementById('cfg-avatar').value=get('  avatar','');
-  document.getElementById('cfg-limite-prodotti').value=getLimiteProdotti();
+  const ppCfg=parseInt((y.match(/^per_page:\s*(\d+)/m)||[])[1]); if(ppCfg)localStorage.setItem('cms_per_page',ppCfg);
+  document.getElementById('cfg-per-page').value=String(getPerPage());
   // social — cerca gli url dopo i label
   const socialMatch=(label)=>{const m=y.match(new RegExp(`label: "${label}"[\\s\\S]*?url: "?([^"\\n]+)"?`));return m?m[1].trim():'';}
   document.getElementById('cfg-website').value=socialMatch('Website');
@@ -1899,6 +1918,11 @@ async function salvaImpostazioni(){
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
   if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:.*$/m,`footer_text: "${footerVal}"`);
   else y+=`\nfooter_text: "${footerVal}"`;
+
+  // elementi per pagina (admin e sito)
+  const ppVal=document.getElementById('cfg-per-page').value||'20';
+  if(y.match(/^per_page:/m)) y=y.replace(/^per_page:.*$/m,`per_page: ${ppVal}`);
+  else y+=`\nper_page: ${ppVal}`;
 
   // autore nome, bio, avatar
   y=y.replace(/(author:\s*\n\s*name\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-author-name').value.trim()}"`);
@@ -2100,13 +2124,14 @@ async function eliminaCatShop(slug){
 
 // ============ SHOP — PRODOTTI ============
 // SHOP PRODOTTI
+// NON chiamare SeoPanel a livello globale: seo-panel.js si carica DOPO questo script (errore = si blocca tutto il resto, categorie incluse)
 let _prodPath=null;
 
 function nuovoProdotto(){
   ['prod-titolo','prod-prezzo','prod-stock','prod-sku','prod-immagine','prod-corpo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('prod-categoria').value='';
   document.getElementById('prod-tipo').value='fisico';
-  _prodPath=null;
+  _prodPath=null;SeoPanel.set('seo-prod',{});
   showMsg('msg-prod','','');
 }
 
@@ -2131,12 +2156,12 @@ function tornaListaProdotti(){
 // ── Paginazione lista prodotti ──────────────────────────────────────────
 // Limite configurabile dalla tab Impostazioni (default 50), salvato in localStorage.
 // getLimiteProdotti()/setLimiteProdotti() sono usate anche dal campo in Impostazioni.
-function getLimiteProdotti(){
-  return parseInt(localStorage.getItem('cms_limite_prodotti'))||50;
-}
-function setLimiteProdotti(n){
-  localStorage.setItem('cms_limite_prodotti', Math.max(1, parseInt(n)||50));
-}
+// GUIDA-SVILUPPO: UN solo valore per tutte le liste = per_page di _config.yml (copia in localStorage 'cms_per_page' per l'admin).
+// Lo leggono anche js/wp-elenchi.js (articoli, pagine) e il sito (assets/js/paginazione.js). Non reintrodurre limiti separati per elenco.
+function getPerPage(){return parseInt(localStorage.getItem('cms_per_page'))||20;}
+function setPerPage(n){localStorage.setItem('cms_per_page', Math.max(1, parseInt(n)||20));}
+function getLimiteProdotti(){return getPerPage();}
+function setLimiteProdotti(n){setPerPage(n);}
 let _prodPaginaCorrente=1;
 
 async function caricaProdotti(){
@@ -2208,7 +2233,7 @@ async function modificaProdotto(path){
   document.getElementById('prod-immagine').value=meta.image||'';
   document.getElementById('prod-categoria').value=meta.category||'';
   document.getElementById('prod-tipo').value=meta.tipo||'fisico';
-  document.getElementById('prod-description').value=meta.description||'';
+  document.getElementById('prod-description').value=meta.description||''; SeoPanel.set('seo-prod',SeoPanel.read(fm[1]));
   document.getElementById('prod-corpo').value=fm[2].trim();
   _prodPath=path;
   showMsg('msg-prod','','');
@@ -2235,7 +2260,7 @@ async function pubblicaProdotto(){
   let sha=undefined;
   if(_prodPath){const r=await ghGet(_prodPath);if(r.ok){const d=await r.json();sha=d.sha;}}
   const description=document.getElementById('prod-description').value.trim();
-  const md=`---\ntitle: "${titolo}"\nprice: ${prezzo||0}\nstock: ${stock||''}\nsku: "${sku}"\ncategory: "${categoria}"\ntipo: "${tipo}"\nimage: "${immagine}"\ndescription: "${description}"\nlayout: product\n---\n${corpo}`;
+  const md=`---\ntitle: "${titolo}"\nprice: ${prezzo||0}\nstock: ${stock||''}\nsku: "${sku}"\ncategory: "${categoria}"\ntipo: "${tipo}"\nimage: "${immagine}"\ndescription: "${description}"\n${SeoPanel.lines('seo-prod')}last_modified_at: ${Auto.nowIso()}\nlayout: product\n---\n${corpo}`;
   showMsg('msg-prod','⏳ Salvataggio...','');
   const res=await ghPut(path,`Prodotto: ${titolo}`,md,sha);
   if(res.ok){showMsg('msg-prod','✅ Prodotto salvato!','ok');startDeployPolling();_prodPath=path;caricaProdotti();}
@@ -2341,8 +2366,10 @@ function salvaTokenOnboarding(){
   document.getElementById('token-input').value=t;
   caricaCategorie();caricaLista();
 }// INIT
+// AVVIO ADMIN. Carica solo cio' che serve alla scheda iniziale (categorie + articoli): il resto e' lazy in showPage().
+// Se qui non parte nulla, aprire la console del browser: quasi sempre e' un errore JS piu' sopra nello script inline.
 window.onload=function(){
-  document.getElementById('data').value=new Date().toISOString().split('T')[0];
+  document.getElementById('data').value=oggiLocale();
   document.getElementById('quill-box').style.display='block';
   document.getElementById('corpo').style.display='none';
   if(!tok()){document.getElementById('onboarding-overlay').style.display='flex';}
@@ -2355,11 +2382,18 @@ window.onload=function(){
   }
 };
 </script>
+<!-- GUIDA-SVILUPPO: ORDINE DI CARICAMENTO. Questi file vengono DOPO lo script inline: non cambiare l'ordine alla leggera.
+     lingue.js prima di lingua-admin.js (la usa); wp-elenchi.js ridefinisce caricaLista/caricaPagine/renderCategorie;
+     lingua-admin.js per ultimo (intercetta window.fetch). Cambiando un file js aggiornare il ?v= per rompere la cache.
+     admin/js/core.js e articoli.js NON sono caricati (legacy). -->
 <script src="js/collezioni.js"></script>
 <script src="js/foto.js"></script>
 <script src="js/editor-seo.js"></script>
+<script src="js/seo-panel.js?v=20261024d"></script>
+<script src="js/automatico.js?v=20261024e"></script>
 <script src="js/dashboard.js"></script>
-<script src="js/wp-elenchi.js"></script>
-<script src="js/lingue.js"></script>
+<script src="js/wp-elenchi.js?v=20261024f"></script>
+<script src="js/lingue.js?v=20261024c"></script>
+<script src="js/lingua-admin.js?v=20261024c"></script>
 </body>
 </html>
