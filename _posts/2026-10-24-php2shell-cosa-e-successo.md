@@ -1,5 +1,6 @@
 ---
 layout: single
+ref: php2shell
 title: "PHP2Shell: cosa fare adesso (CVE-2026-109618 e CVE-2026-109619)"
 date: 2026-10-24
 excerpt: "Due falle critiche in PHP, trovate con l'aiuto dell'AI. Versioni corrette, cosa controllare e cosa fare subito."

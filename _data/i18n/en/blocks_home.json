@@ -1,0 +1,44 @@
+[
+  {
+    "id": "hero",
+    "nome": "Hero",
+    "enabled": true,
+    "html": "<style>.gc{--gc-acc:#0b6cf0;--gc-ink:#0a1628}.ent-hero{background:linear-gradient(160deg,#0a1628,#12233f);color:#fff;padding:clamp(3rem,8vw,6rem) 0}.ent-hero .gc-h1{color:#fff}.ent-hero .gc-h1 em{color:#5eb0ff}.ent-hero .gc-lead{color:#c3cfdf}.ent-hero .gc-eyebrow{color:#5eb0ff}.ent-hero .gc-btn-o{color:#fff;border-color:#fff}.ent-hero .gc-btn-o:hover{background:#fff;color:#0a1628}.ent-hero .gc-btn-a:hover{background:transparent;color:#fff}.ent-cycle{display:grid;gap:.8rem}.ent-cycle div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:1rem 1.2rem}.ent-cycle b{display:block;color:#fff;font-size:1.05rem}.ent-cycle span{color:#c3cfdf;font-size:.93rem}.ent-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;text-align:center;margin-top:1.6rem}.ent-stats b{display:block;font:700 clamp(2.2rem,4vw,3.2rem) var(--gc-head);color:var(--gc-acc)}.ent-stats span{color:var(--gc-mut);font-size:.95rem}.ent-4{grid-template-columns:repeat(4,1fr)!important}.ent-pl ul{margin:.8rem 0 0;padding-left:1.1rem;color:var(--gc-mut);font-size:.93rem;line-height:1.6}.ent-src{font-size:.82rem;color:var(--gc-mut);text-align:center;margin:1.4rem 0 0}@media(max-width:900px){.ent-4{grid-template-columns:1fr 1fr!important}}@media(max-width:640px){.ent-4,.ent-stats{grid-template-columns:1fr!important}}</style><div class=\"gc\"><section class=\"ent-hero\"><div class=\"gc-wrap gc-hero-in\"><div><p class=\"gc-eyebrow\">Cybersecurity for business</p><h1 class=\"gc-h1\">Cybersecurity built for the age of AI. <em>Less exposure, more control.</em></h1><p class=\"gc-lead\">Vulnerabilities are now found and exploited far faster than before. We help organizations know what they expose online, fix it quickly and recover if something goes wrong.</p><div class=\"gc-act\"><a class=\"gc-btn gc-btn-a\" href=\"__BASEURL__/en/contact/\">Request an assessment</a><a class=\"gc-btn gc-btn-o\" href=\"__BASEURL__/en/services/\">Our services</a></div></div><div class=\"ent-cycle\"><div><b>Prevent</b><span>Know what is running and keep it updated</span></div><div><b>Detect</b><span>Spot unusual access and files</span></div><div><b>Respond</b><span>Close the hole and rotate the keys</span></div><div><b>Recover</b><span>Restart from a backup you have tested</span></div></div></div></section></div>"
+  },
+  {
+    "id": "contesto",
+    "nome": "Context",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec\" id=\"contesto\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Context</p><h2 class=\"gc-h2\">The time to patch has shrunk</h2><p class=\"gc-lead\">In October 2026 two critical flaws in the core of PHP, found with the help of artificial intelligence, received emergency fixes.</p><div class=\"ent-stats\"><div><b>9.2</b><span>CVSS v4.0 score of both flaws</span></div><div><b>2</b><span>critical vulnerabilities, exploitable without authentication</span></div><div><b>31/12/2026</b><span>end of fixes for the PHP 8.2 branch</span></div></div><p class=\"ent-src\">Source: PHP security advisory of 21 October 2026. Details on the <a href=\"__BASEURL__/en/blog/\">blog</a>.</p></div></section></div>"
+  },
+  {
+    "id": "servizi",
+    "nome": "Services",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec gc-soft\" id=\"servizi\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Services</p><h2 class=\"gc-h2\">One cycle, from prevention to recovery</h2><div class=\"gc-plat ent-4\"><div class=\"gc-pl ent-pl\"><span class=\"n\">01</span><b>Prevent</b><ul><li>Inventory of versions and components</li><li>Updating PHP and applications</li><li>Checking with the hosting provider</li></ul></div><div class=\"gc-pl ent-pl\"><span class=\"n\">02</span><b>Detect</b><ul><li>Checks for suspicious files and access</li><li>Server log analysis</li><li>Verification after every critical advisory</li></ul></div><div class=\"gc-pl ent-pl\"><span class=\"n\">03</span><b>Respond</b><ul><li>Rotating passwords, keys and tokens</li><li>Guidance if a compromise emerges</li><li>Written report of what was done</li></ul></div><div class=\"gc-pl ent-pl\"><span class=\"n\">04</span><b>Recover</b><ul><li>Backup set up and checked</li><li>Restore test</li><li>Written restart procedure</li></ul></div></div><p style=\"margin-top:1.6rem\"><a class=\"gc-link\" href=\"__BASEURL__/en/services/\">Full details of our services</a></p></div></section></div>"
+  },
+  {
+    "id": "perchi",
+    "nome": "Who we work for",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec\" id=\"perchi\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Who we work for</p><h2 class=\"gc-h2\">Organizations that depend on websites and web applications</h2><div class=\"gc-plat ent-4\"><div class=\"gc-pl ent-pl\"><b>Small businesses and professionals</b><ul><li>Showcase sites and portals</li><li>Servers and VPS managed in-house</li></ul></div><div class=\"gc-pl ent-pl\"><b>Web agencies</b><ul><li>Portfolios of client sites</li><li>Sweeping checks after an advisory</li></ul></div><div class=\"gc-pl ent-pl\"><b>Software houses</b><ul><li>Custom PHP applications</li><li>Versions and dependencies to keep in order</li></ul></div><div class=\"gc-pl ent-pl\"><b>E-commerce</b><ul><li>Sites holding customer and order data</li><li>Backup and recovery first</li></ul></div></div></div></section></div>"
+  },
+  {
+    "id": "metodo",
+    "nome": "How we work",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec gc-soft\" id=\"metodo\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Method</p><h2 class=\"gc-h2\">How an engagement works</h2><div class=\"gc-plat ent-4\"><div class=\"gc-pl\"><span class=\"n\">01</span><b>Written engagement</b><p>We define in writing which systems are in scope. We do not work on anything that is not yours.</p></div><div class=\"gc-pl\"><span class=\"n\">02</span><b>Assessment</b><p>We check versions, configuration and signs of compromise, and give you a clear picture.</p></div><div class=\"gc-pl\"><span class=\"n\">03</span><b>Intervention</b><p>Updates and fixes agreed in advance, with the price set before we start.</p></div><div class=\"gc-pl\"><span class=\"n\">04</span><b>Report</b><p>What we checked, what we changed, what is left to do. No promises of absolute security.</p></div></div></div></section></div>"
+  },
+  {
+    "id": "avvisi",
+    "nome": "Security advisories",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec\" id=\"avvisi\"><div class=\"gc-wrap gc-2c\"><div><p class=\"gc-eyebrow\">Blog</p><h2 class=\"gc-h2\">Security advisories, explained clearly</h2><p class=\"gc-lead\">Whenever a serious flaw is disclosed we explain it plainly: who is at risk, what to update, what to check.</p><a class=\"gc-btn gc-btn-k\" href=\"__BASEURL__/en/blog/\">Read the advisories</a></div><div class=\"gc-pl\"><span class=\"n\">LATEST ADVISORY</span><b>PHP2Shell: what to do now</b><p>CVE-2026-109618 and CVE-2026-109619: fixed versions, checks and immediate steps.</p></div></div></section></div>"
+  },
+  {
+    "id": "contatti",
+    "nome": "Contact",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec gc-dark\" id=\"contatti\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Contact</p><h2 class=\"gc-h2\">Do you know what you are exposing online?</h2><p class=\"gc-lead\">Tell us about your site or infrastructure and we will tell you where to start.</p><a class=\"gc-btn\" href=\"__BASEURL__/en/contact/\">Request an assessment</a></div></section></div>"
+  }
+]
