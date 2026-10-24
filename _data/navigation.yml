@@ -10,10 +10,12 @@
 main:
   - title: "Home"
     url: /
+  - title: "Emergenza PHP2Shell"
+    url: /emergenza-php2shell/
+  - title: "Servizi"
+    url: /servizi/
   - title: "Journal"
     url: /blog/
-  - title: "Shop"
-    url: /negozio/
   - title: "Chi siamo"
     url: /chi-siamo/
   - title: "Contatti"

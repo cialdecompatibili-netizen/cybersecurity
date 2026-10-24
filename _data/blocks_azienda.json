@@ -1,8 +1,14 @@
 [
   {
-    "id": "box1792826018440",
-    "nome": "Nuovo box",
+    "id": "chi",
+    "nome": "Chi siamo",
     "enabled": true,
-    "html": "<section style=\"padding:40px;text-align:center\">\n  <h2>Nuovo box</h2>\n  <p>Scrivi qui il tuo HTML. nwpi</p>\n</section>"
+    "html": "<div class=\"gc\"><section class=\"gc-sec\" id=\"chi\"><div class=\"gc-wrap\"><p class=\"gc-eyebrow\">Chi siamo</p><h2 class=\"gc-h2\">Sicurezza pratica per chi ha un sito da proteggere</h2><p class=\"gc-lead\">Ci occupiamo di sicurezza informatica per piccole imprese, professionisti e agenzie che gestiscono siti web e applicazioni PHP. Con l&#39;AI le falle vengono trovate e trasformate in attacchi molto pi&ugrave; in fretta di prima: per chi ha un sito il margine per aggiornare si &egrave; ridotto.</p><p>Partiamo dalle cose che contano davvero: sapere che software gira, tenerlo aggiornato, accorgersi se qualcosa &egrave; andato storto e poter ripartire da un backup che funziona.</p></div></section></div>"
+  },
+  {
+    "id": "principi",
+    "nome": "Principi",
+    "enabled": true,
+    "html": "<div class=\"gc\"><section class=\"gc-sec gc-soft\" id=\"principi\"><div class=\"gc-wrap\"><h2 class=\"gc-h2\">Come ci comportiamo</h2><div class=\"gc-plat\"><div class=\"gc-pl\"><span class=\"n\">1</span><b>Autorizzazione scritta</b><p>Mai controlli su sistemi che non sono del cliente o per cui non c&#39;&egrave; un incarico.</p></div><div class=\"gc-pl\"><span class=\"n\">2</span><b>Niente titoli inventati</b><p>Non dichiariamo certificazioni che non abbiamo e non promettiamo risultati assoluti.</p></div><div class=\"gc-pl\"><span class=\"n\">3</span><b>Prezzo prima del lavoro</b><p>Il costo dell&#39;intervento si concorda prima di iniziare.</p></div></div></div></section></div>"
   }
 ]
