@@ -51,3 +51,10 @@ Elementi per pagina (24/10/2026)
 - UN solo valore per tutte le liste: `per_page` in _config.yml (default 20), si cambia da admin > Impostazioni (10, 20, 50, 100, 200, 500). L'admin lo copia in localStorage 'cms_per_page' (getPerPage in admin/index.html); NON reintrodurre limiti separati per elenco.
 - Admin: elenchi Articoli, Pagine e Prodotti usano getPerPage(); le miniature/metadati si leggono a gruppi di 6 (metaQueue in wp-elenchi.js) per non finire il limite API con 200-500 voci.
 - Sito: assets/js/paginazione.js impagina blog, negozio e pagina categoria (it e en) con gli attributi data-pg, data-pg-item, data-per sul contenitore; le voci restano tutte nell'HTML. Filtri che usano hidden (pillole negozio) chiamano PgLista.refresh. Se aggiungi un nuovo elenco lungo: stessi tre attributi, niente codice nuovo.
+
+
+## Inglese (en/)
+- Ogni articolo/pagina IT ha il gemello in `en/` con lo stesso `ref:` e `tr_hash` = hash del corpo IT (calcolato con `automation/traduzioni_sync.py`, `lg_hash`). Se cambi l'italiano, l'hook segna `da_aggiornare`.
+- Categorie EN: News, Vulnerabilities, Prevention, Incidents (IT: Attualità, Vulnerabilità, Prevenzione, Incidenti). Pagine in `en/category-*.md`, descrizioni in `_data/i18n/en/categorie.json`, indice `en/topics.md` (usa `_includes/hub-argomenti.html`, come `/categorie/`).
+- `lista-categoria.html` e `hub-argomenti.html` sono bilingui (testi in cima al file). Nuovo articolo EN: copia l'IT in `en/_posts/`, stesso `ref:`, `lang: en`, `tr: tradotto`, categoria tradotta, stessa copertina SVG.
+- URL articoli EN = `/en/<categoria>/<titolo>/`: Jekyll aggiunge da solo la categoria-cartella `en`, quindi il permalink è `/:categories/:title/` (mai `/en/:categories/...` → `/en/en/`). Le liste ignorano la categoria uguale al codice lingua.
