@@ -7,8 +7,8 @@ share: false
 ref: blog
 lang: en
 locale: en
-tr: da_aggiornare
-tr_hash: zpwbgg
+tr: tradotto
+tr_hash: 16l3vxr
 permalink: /en/blog/
 ---
 {%- assign posts_l = site.posts | where: "lang", page.lang -%}
@@ -146,7 +146,7 @@ permalink: /en/blog/
       {% if post.categories.size > 0 %}
       <div class="blog-cats">
         {% for cat in post.categories limit:2 %}
-        <a href="{{ '/categories/#' | prepend: site.baseurl }}{{ cat | slugify }}" class="blog-cat">{{ cat }}</a>
+        {% assign cpage = site.pages | where: "categoria", cat | first %}<a href="{% if cpage %}{{ cpage.url | relative_url }}{% else %}{% include url-ref.html ref="argomenti" %}#{{ cat | slugify }}{% endif %}" class="blog-cat">{{ cat }}</a>
         {% endfor %}
       </div>
       {% endif %}

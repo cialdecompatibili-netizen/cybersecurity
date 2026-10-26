@@ -5,9 +5,21 @@ Cosa legge: articoli della lingua della pagina (site.posts where lang), descrizi
 NON toccare: gli attributi data-pg* abilitano la paginazione del sito (assets/js/paginazione.js).
 {%- endcomment -%}
 {%- assign cat_nome = include.cat -%}
+{%- assign L = page.lang | default: "it" -%}
+{%- if L == "en" -%}
+  {%- assign t_topics = "Topics" -%}{%- assign t_one = "article" -%}{%- assign t_many = "articles" -%}
+  {%- assign t_other = "Other topics" -%}{%- assign t_read = "Read the article" -%}{%- assign t_min = "min read" -%}
+  {%- assign t_empty = "There are no articles here yet." -%}{%- assign t_goblog = "Go to the blog" -%}
+  {%- assign mesi = "January,February,March,April,May,June,July,August,September,October,November,December" | split: "," -%}
+{%- else -%}
+  {%- assign t_topics = "Argomenti" -%}{%- assign t_one = "articolo" -%}{%- assign t_many = "articoli" -%}
+  {%- assign t_other = "Altri argomenti" -%}{%- assign t_read = "Leggi l'articolo" -%}{%- assign t_min = "min di lettura" -%}
+  {%- assign t_empty = "Qui non ci sono ancora articoli." -%}{%- assign t_goblog = "Vai al blog" -%}
+  {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
+{%- endif -%}
 {%- assign posts_l = site.posts | where: "lang", page.lang -%}
-{%- assign cdata = site.data.categorie | where: "nome", cat_nome | first -%}
-{%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
+{%- assign cdat_all = site.data.i18n[L].categorie | default: site.data.categorie -%}
+{%- assign cdata = cdat_all | where: "nome", cat_nome | first -%}
 {%- assign n = 0 -%}
 {%- for p in posts_l -%}{%- if p.categories contains cat_nome -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
 <style>
@@ -43,13 +55,13 @@ NON toccare: gli attributi data-pg* abilitano la paginazione del sito (assets/js
 
 <div class="cl">
   <header class="cl-head">
-    <p class="cl-crumb"><a href="{{ '/blog/' | relative_url }}">Blog</a> &rsaquo; <a href="{{ '/categorie/' | relative_url }}">Argomenti</a></p>
+    <p class="cl-crumb"><a href="{% include url-ref.html ref="blog" %}">Blog</a> &rsaquo; <a href="{% include url-ref.html ref="argomenti" %}">{{ t_topics }}</a></p>
     <h1 class="cl-h1">{{ cat_nome }}</h1>
     {%- if cdata.descrizione and cdata.descrizione != "" %}
     <p class="cl-desc">{{ cdata.descrizione | strip_html }}</p>
     {%- endif %}
-    <span class="cl-count">{{ n }} {% if n == 1 %}articolo{% else %}articoli{% endif %}</span>
-    <nav class="cl-topics" aria-label="Altri argomenti">
+    <span class="cl-count">{{ n }} {% if n == 1 %}{{ t_one }}{% else %}{{ t_many }}{% endif %}</span>
+    <nav class="cl-topics" aria-label="{{ t_other }}">
       {%- assign cats_all = posts_l | map: "categories" | join: "," | split: "," | uniq | sort -%}
       {%- for c in cats_all -%}
       {%- assign cp = site.pages | where: "categoria", c | first -%}
@@ -59,7 +71,7 @@ NON toccare: gli attributi data-pg* abilitano la paginazione del sito (assets/js
   </header>
 
   {%- if n == 0 %}
-  <p class="cl-empty">Qui non ci sono ancora articoli. <a href="{{ '/blog/' | relative_url }}">Vai al blog</a>.</p>
+  <p class="cl-empty">{{ t_empty }} <a href="{% include url-ref.html ref="blog" %}">{{ t_goblog }}</a>.</p>
   {%- else %}
   <ul class="cl-list" data-pg data-pg-item="li.cl-item" data-per="{{ site.per_page | default: 20 }}">
     {%- for p in posts_l -%}
@@ -71,8 +83,8 @@ NON toccare: gli attributi data-pg* abilitano la paginazione del sito (assets/js
         <span class="cl-kick">{{ cat_nome }}</span>
         <a class="cl-title" href="{{ p.url | relative_url }}">{{ p.title }}</a>
         <div class="cl-ex">{{ p.excerpt | strip_html | strip_newlines | truncate: 220 }}</div>
-        <div class="cl-meta">{{ p.date | date: "%-d" }} {{ mesi[m] }} {{ p.date | date: "%Y" }} · {{ p.content | number_of_words | divided_by: 200 | plus: 1 }} min di lettura</div>
-        <a class="cl-more" href="{{ p.url | relative_url }}">Leggi l'articolo &rarr;</a>
+        <div class="cl-meta">{% if L == "en" %}{{ mesi[m] }} {{ p.date | date: "%-d, %Y" }}{% else %}{{ p.date | date: "%-d" }} {{ mesi[m] }} {{ p.date | date: "%Y" }}{% endif %} · {{ p.content | number_of_words | divided_by: 200 | plus: 1 }} {{ t_min }}</div>
+        <a class="cl-more" href="{{ p.url | relative_url }}">{{ t_read }} &rarr;</a>
       </div>
     </li>
     {%- endif -%}

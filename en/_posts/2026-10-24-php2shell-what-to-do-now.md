@@ -7,6 +7,9 @@ seo_title: "PHP2Shell: what to do now (CVE-2026-109618 and CVE-2026-109619)"
 seo_description: "PHP2Shell: fixed PHP versions, how to check your site and what to do right away, explained simply."
 categories:
   - Vulnerabilities
+header:
+  teaser: /assets/images/blog/php2shell-cosa-e-successo.svg
+  image: /assets/images/blog/php2shell-cosa-e-successo.svg
 ref: php2shell
 lang: en
 locale: en

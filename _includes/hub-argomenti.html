@@ -1,0 +1,123 @@
+{%- comment -%}
+Indice editoriale degli argomenti (stile rivista), IT + EN. Usato da _pages/category-archive.md (/categorie/) e en/topics.md (/en/topics/).
+Cosa fa: legge gli articoli della lingua della pagina, ricava le categorie dai front matter (categories:), le descrizioni da
+_data/categorie.json (IT) o _data/i18n/<lingua>/categorie.json (altre lingue), e disegna indice a riquadri + una sezione per categoria.
+Se esiste una pagina con campo `categoria:` uguale al nome (es. _pages/cat-attualita.md) i link vanno li', altrimenti all'ancora (#slug).
+NON toccare: gli id delle sezioni (slugify della categoria) sono gli ancoraggi di riserva.
+Nuova lingua: aggiungere un ramo `elsif` nelle stringhe qui sotto.
+{%- endcomment -%}
+{%- assign L = page.lang | default: "it" -%}
+{%- if L == "en" -%}
+  {%- assign t_kick = "Blog" -%}{%- assign t_h1 = "Topics" -%}
+  {%- assign t_lead = "Our articles sorted by theme: what is happening in cybersecurity, which flaws affect your website, how to prevent problems and what to do when one happens." -%}
+  {%- assign t_one = "article" -%}{%- assign t_many = "articles" -%}
+  {%- assign t_read = "Read the article" -%}{%- assign t_min = "min read" -%}{%- assign t_all = "All articles" -%}
+  {%- assign t_aria = "Topics" -%}
+  {%- assign mesi = "January,February,March,April,May,June,July,August,September,October,November,December" | split: "," -%}
+{%- else -%}
+  {%- assign t_kick = "Blog" -%}{%- assign t_h1 = "Argomenti" -%}
+  {%- assign t_lead = "Gli articoli del blog ordinati per tema: cosa succede nel mondo della sicurezza informatica, quali falle riguardano il tuo sito, come prevenire i problemi e cosa fare quando ne capita uno." -%}
+  {%- assign t_one = "articolo" -%}{%- assign t_many = "articoli" -%}
+  {%- assign t_read = "Leggi l'articolo" -%}{%- assign t_min = "min di lettura" -%}{%- assign t_all = "Tutti gli articoli" -%}
+  {%- assign t_aria = "Argomenti" -%}
+  {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
+{%- endif -%}
+{%- assign posts_l = site.posts | where: "lang", L -%}
+{%- assign cats_all = posts_l | map: "categories" | join: "," | split: "," | uniq | sort -%}
+{%- assign cdat_all = site.data.i18n[L].categorie | default: site.data.categorie -%}
+
+<style>
+#page-title{display:none}
+.ed{--ed-ink:#14181f;--ed-mute:#5d6673;--ed-line:#e3e6ea;--ed-acc:var(--t-accent,#1f3a5f);max-width:1080px;margin:0 auto;color:var(--ed-ink)}
+.ed a{text-decoration:none}
+.ed-head{padding:.5rem 0 2.2rem;border-bottom:1px solid var(--ed-line);margin-bottom:2.2rem}
+.ed-kicker{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ed-acc);margin:0 0 .7rem}
+.ed-h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2rem,4.2vw,3rem);font-weight:500;line-height:1.1;margin:0 0 .8rem}
+.ed-lead{font-size:1.05rem;line-height:1.7;color:var(--ed-mute);max-width:46rem;margin:0}
+.ed-index{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin:0 0 3.2rem}
+.ed-tile{display:flex;flex-direction:column;gap:.45rem;padding:1.15rem 1.2rem;border:1px solid var(--ed-line);border-radius:12px;background:#fff;color:inherit;transition:border-color .15s,box-shadow .15s}
+.ed-tile:hover{border-color:var(--ed-acc);box-shadow:0 6px 18px rgba(20,24,31,.07)}
+.ed-tile b{font-family:'Playfair Display',Georgia,serif;font-size:1.2rem;font-weight:500;color:var(--ed-ink)}
+.ed-tile span{font-size:.85rem;line-height:1.5;color:var(--ed-mute);flex:1}
+.ed-tile i{font-style:normal;font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ed-acc)}
+.ed-sec{padding:2.4rem 0 1.2rem;border-top:1px solid var(--ed-line);scroll-margin-top:5rem}
+.ed-sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.4rem}
+.ed-sec-head h2{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;font-weight:500;margin:0}
+.ed-count{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ed-mute)}
+.ed-sec-desc{margin:0 0 1.6rem;color:var(--ed-mute);line-height:1.65;max-width:46rem}
+.ed-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:2.4rem;align-items:start}
+.ed-feat{display:block;color:inherit}
+.ed-feat h3{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:500;line-height:1.25;margin:.4rem 0 .7rem;color:var(--ed-ink)}
+.ed-feat:hover h3{color:var(--ed-acc)}
+.ed-feat p{margin:0 0 .9rem;line-height:1.75;color:var(--ed-mute)}
+.ed-meta{font-size:.78rem;color:#8a929e}
+.ed-more{display:inline-block;margin-top:.2rem;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ed-acc)}
+.ed-list{list-style:none;margin:0;padding:0}
+.ed-list li{padding:.95rem 0;border-bottom:1px solid var(--ed-line)}
+.ed-list li:first-child{padding-top:0}
+.ed-list li:last-child{border-bottom:none}
+.ed-list a{display:block;color:inherit}
+.ed-list strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:500;line-height:1.35;margin:.15rem 0 0;color:var(--ed-ink)}
+.ed-list a:hover strong{color:var(--ed-acc)}
+.ed-all{margin:2.6rem 0 1rem;padding-top:1.6rem;border-top:1px solid var(--ed-line);text-align:center}
+.ed-sec:target .ed-sec-head h2{color:var(--ed-acc)}
+@media(max-width:760px){.ed-grid{grid-template-columns:1fr;gap:1.4rem}}
+</style>
+
+<div class="ed">
+  <header class="ed-head">
+    <p class="ed-kicker">{{ t_kick }}</p>
+    <h1 class="ed-h1">{{ t_h1 }}</h1>
+    <p class="ed-lead">{{ t_lead }}</p>
+  </header>
+
+  <nav class="ed-index" aria-label="{{ t_aria }}">
+    {%- for cname in cats_all -%}
+    {%- assign cdata = cdat_all | where: "nome", cname | first -%}
+    {%- assign cpage = site.pages | where: "categoria", cname | first -%}
+    {%- assign n = 0 -%}
+    {%- for p in posts_l -%}{%- if p.categories contains cname -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor %}
+    <a class="ed-tile" href="{% if cpage %}{{ cpage.url | relative_url }}{% else %}#{{ cname | slugify }}{% endif %}">
+      <b>{{ cname }}</b>
+      <span>{{ cdata.descrizione | strip_html | truncate: 95 }}</span>
+      <i>{{ n }} {% if n == 1 %}{{ t_one }}{% else %}{{ t_many }}{% endif %}</i>
+    </a>
+    {%- endfor %}
+  </nav>
+
+  {%- for cname in cats_all -%}
+  {%- assign cdata = cdat_all | where: "nome", cname | first -%}
+  {%- assign cposts = "" | split: "" -%}
+  {%- for p in posts_l -%}{%- if p.categories contains cname -%}{%- assign cposts = cposts | push: p -%}{%- endif -%}{%- endfor -%}
+  {%- assign feat = cposts | first -%}
+  {%- assign cpage = site.pages | where: "categoria", cname | first %}
+  <section class="ed-sec" id="{{ cname | slugify }}">
+    <div class="ed-sec-head">
+      <h2>{% if cpage %}<a href="{{ cpage.url | relative_url }}" style="color:inherit">{{ cname }}</a>{% else %}{{ cname }}{% endif %}</h2>
+      <span class="ed-count">{% if cpage %}<a href="{{ cpage.url | relative_url }}" style="color:inherit">{% endif %}{{ cposts.size }} {% if cposts.size == 1 %}{{ t_one }}{% else %}{{ t_many }}{% endif %}{% if cpage %} &rarr;</a>{% endif %}</span>
+    </div>
+    {%- if cdata.descrizione and cdata.descrizione != "" %}
+    <p class="ed-sec-desc">{{ cdata.descrizione | strip_html }}</p>
+    {%- endif %}
+    <div class="ed-grid">
+      <a class="ed-feat" href="{{ feat.url | relative_url }}">
+        {%- assign m = feat.date | date: "%-m" | minus: 1 %}
+        <span class="ed-meta">{% if L == "en" %}{{ mesi[m] }} {{ feat.date | date: "%-d, %Y" }}{% else %}{{ feat.date | date: "%-d" }} {{ mesi[m] }} {{ feat.date | date: "%Y" }}{% endif %} · {{ feat.content | number_of_words | divided_by: 200 | plus: 1 }} {{ t_min }}</span>
+        <h3>{{ feat.title }}</h3>
+        <p>{{ feat.excerpt | strip_html | strip_newlines | truncate: 220 }}</p>
+        <span class="ed-more">{{ t_read }} &rarr;</span>
+      </a>
+      {%- if cposts.size > 1 %}
+      <ul class="ed-list">
+        {%- for p in cposts offset: 1 %}
+        {%- assign m = p.date | date: "%-m" | minus: 1 %}
+        <li><a href="{{ p.url | relative_url }}"><span class="ed-meta">{% if L == "en" %}{{ mesi[m] }} {{ p.date | date: "%-d, %Y" }}{% else %}{{ p.date | date: "%-d" }} {{ mesi[m] }} {{ p.date | date: "%Y" }}{% endif %}</span><strong>{{ p.title }}</strong></a></li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+    </div>
+  </section>
+  {%- endfor %}
+
+  <div class="ed-all"><a class="btn btn--primary" href="{% include url-ref.html ref="blog" %}">{{ t_all }}</a></div>
+</div>

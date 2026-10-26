@@ -1,0 +1,18 @@
+[
+  {
+    "nome": "News",
+    "descrizione": "The cybersecurity news that matters, explained without beating about the bush: what happened and what it means for anyone with a website or a business."
+  },
+  {
+    "nome": "Vulnerabilities",
+    "descrizione": "Flaws, CVEs and urgent updates: who is at risk, which versions to install and what to check."
+  },
+  {
+    "nome": "Prevention",
+    "descrizione": "Habits, configurations and checks that reduce risk before anything happens."
+  },
+  {
+    "nome": "Incidents",
+    "descrizione": "What to do when an attack is under way or has just happened: first steps, recovery and response plan."
+  }
+]

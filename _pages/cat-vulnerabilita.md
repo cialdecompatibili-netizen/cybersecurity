@@ -1,5 +1,6 @@
 ---
 layout: single
+ref: cat-vulnerabilita
 title: "Vulnerabilità"
 permalink: /categoria/vulnerabilita/
 categoria: "Vulnerabilità"

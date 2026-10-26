@@ -1,5 +1,6 @@
 ---
 layout: single
+ref: cat-incidenti
 title: "Incidenti"
 permalink: /categoria/incidenti/
 categoria: "Incidenti"

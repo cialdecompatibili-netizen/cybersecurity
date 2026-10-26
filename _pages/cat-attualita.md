@@ -1,5 +1,6 @@
 ---
 layout: single
+ref: cat-attualita
 title: "Attualità"
 permalink: /categoria/attualita/
 categoria: "Attualità"

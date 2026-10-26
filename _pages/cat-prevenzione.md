@@ -1,5 +1,6 @@
 ---
 layout: single
+ref: cat-prevenzione
 title: "Prevenzione"
 permalink: /categoria/prevenzione/
 categoria: "Prevenzione"
