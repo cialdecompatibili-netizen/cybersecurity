@@ -118,7 +118,7 @@ defaults:
       type: posts
     values:
       layout: single
-      permalink: /en/:categories/:title/
+      permalink: /:categories/:title/
   # lingua di base: tutto cio' che non e' in una cartella lingua e' `it` (filtra elenchi e selettore)
   - scope:
       path: ""

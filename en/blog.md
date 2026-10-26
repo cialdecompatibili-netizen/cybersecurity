@@ -145,7 +145,7 @@ permalink: /en/blog/
     <div class="blog-body">
       {% if post.categories.size > 0 %}
       <div class="blog-cats">
-        {% for cat in post.categories limit:2 %}
+        {% assign pcats = post.categories | where_exp: "c", "c != page.lang" %}{% for cat in pcats limit:2 %}
         {% assign cpage = site.pages | where: "categoria", cat | first %}<a href="{% if cpage %}{{ cpage.url | relative_url }}{% else %}{% include url-ref.html ref="argomenti" %}#{{ cat | slugify }}{% endif %}" class="blog-cat">{{ cat }}</a>
         {% endfor %}
       </div>

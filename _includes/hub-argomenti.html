@@ -23,7 +23,7 @@ Nuova lingua: aggiungere un ramo `elsif` nelle stringhe qui sotto.
   {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
 {%- endif -%}
 {%- assign posts_l = site.posts | where: "lang", L -%}
-{%- assign cats_all = posts_l | map: "categories" | join: "," | split: "," | uniq | sort -%}
+{%- assign cats_all = posts_l | map: "categories" | join: "," | split: "," | uniq | sort | where_exp: "c", "c != L" -%}
 {%- assign cdat_all = site.data.i18n[L].categorie | default: site.data.categorie -%}
 
 <style>

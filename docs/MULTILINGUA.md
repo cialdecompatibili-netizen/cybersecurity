@@ -7,7 +7,7 @@ Funziona su Jekyll puro (GitHub Pages), senza plugin. Lingua base alla radice (`
 | Pezzo | Dove | A cosa serve |
 |---|---|---|
 | Lingue attive | `_config.yml`: `default_lang`, `languages: [it, en]`, `locale` | Elenco lingue e lingua base |
-| Assegnazione lingua | `_config.yml` > `defaults` (blocco `LANG-DEFAULTS`) | Ogni file in `en/` prende `lang: en`; gli articoli in `en/_posts` hanno permalink `/en/:categories/:title/` |
+| Assegnazione lingua | `_config.yml` > `defaults` (blocco `LANG-DEFAULTS`) | Ogni file in `en/` prende `lang: en`; gli articoli in `en/_posts` hanno permalink `/:categories/:title/` (Jekyll aggiunge da solo la categoria-cartella `en`, quindi l'url diventa `/en/<categoria>/<titolo>/`; NON anteporre `/en/` a mano, altrimenti esce `/en/en/...`; le liste devono ignorare la categoria uguale al codice lingua) |
 | Collegamento tra versioni | `ref:` nel front matter | Stesso `ref` in tutte le lingue = stessa pagina/articolo |
 | Stato traduzione | `tr: copia / tradotto / da_aggiornare` e `tr_hash` | `copia` = ancora testo originale (noindex, fuori sitemap) |
 | Nomi lingue e bandiere | `_data/languages.yml`, `assets/images/flags/*.svg` | Selettore nel menu |
