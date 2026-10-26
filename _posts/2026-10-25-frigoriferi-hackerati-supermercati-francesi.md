@@ -8,6 +8,9 @@ seo_title: "Attacco ai frigoriferi dei supermercati: cosa insegna alle aziende"
 seo_description: "L'attacco ai sistemi di refrigerazione dei supermercati francesi spiegato semplice: aggiornamenti non fatti, credenziali e cosa controllare nella tua azienda."
 categories:
   - Vulnerabilità
+header:
+  teaser: /assets/images/blog/frigoriferi-hackerati-supermercati-francesi.svg
+  image: /assets/images/blog/frigoriferi-hackerati-supermercati-francesi.svg
 ---
 
 Un frigorifero che si può controllare da remoto è comodo: un operatore vede temperature e allarmi senza muoversi. Ma ogni cosa collegata a internet è anche raggiungibile da chi non dovrebbe. È quello che è successo ai supermercati francesi, e ne ha parlato Anna Vaccarelli, presidente del Clusit, in un'intervista a Tgcom24 del 26 ottobre 2026.

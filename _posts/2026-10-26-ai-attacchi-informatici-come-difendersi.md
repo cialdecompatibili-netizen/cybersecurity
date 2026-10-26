@@ -8,6 +8,9 @@ seo_title: "Intelligenza artificiale e cyber attacchi: cosa cambia per le aziend
 seo_description: "Come l'AI rende gli attacchi informatici più rapidi, cosa significa per siti e server e quali difese pratiche funzionano ancora: aggiornamenti, accessi, backup."
 categories:
   - Prevenzione
+header:
+  teaser: /assets/images/blog/ai-attacchi-informatici-come-difendersi.svg
+  image: /assets/images/blog/ai-attacchi-informatici-come-difendersi.svg
 ---
 
 Il tema esce ormai in ogni notizia di sicurezza: dall'intervista di Tgcom24 alla presidente del Clusit, Anna Vaccarelli, alle discussioni sui modelli AI senza filtri su Hugging Face. L'intelligenza artificiale sta cambiando il modo in cui si attacca. La domanda per un'azienda è: cosa cambia per me?

@@ -8,6 +8,9 @@ seo_title: "Modelli AI uncensored e abliterated: cosa sono e quali rischi compor
 seo_description: "Cosa sono i modelli di intelligenza artificiale uncensored o abliterated, usi legittimi, rischi per la sicurezza informatica e cosa possono fare le aziende."
 categories:
   - Attualità
+header:
+  teaser: /assets/images/blog/modelli-ai-uncensored-cosa-sono.svg
+  image: /assets/images/blog/modelli-ai-uncensored-cosa-sono.svg
 ---
 
 Dopo le notizie sulle rimozioni di alcuni modelli da Hugging Face, molti ci hanno chiesto: ma cosa sono questi modelli "uncensored", e perché fanno tanto discutere? Proviamo a spiegarlo senza gergo.

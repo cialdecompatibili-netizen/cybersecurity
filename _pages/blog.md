@@ -142,7 +142,7 @@ share: false
       {% if post.categories.size > 0 %}
       <div class="blog-cats">
         {% for cat in post.categories limit:2 %}
-        <a href="{{ '/categorie/#' | prepend: site.baseurl }}{{ cat | slugify }}" class="blog-cat">{{ cat }}</a>
+        {% assign cpage = site.pages | where: "categoria", cat | first %}<a href="{% if cpage %}{{ cpage.url | relative_url }}{% else %}{{ '/categorie/#' | prepend: site.baseurl }}{{ cat | slugify }}{% endif %}" class="blog-cat">{{ cat }}</a>
         {% endfor %}
       </div>
       {% endif %}

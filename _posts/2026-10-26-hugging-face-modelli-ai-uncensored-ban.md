@@ -8,6 +8,9 @@ seo_title: "Hugging Face e modelli AI uncensored: ban totale o solo alcuni repos
 seo_description: "Hugging Face sta bannando i modelli AI uncensored? Cosa è stato rimosso davvero, cosa resta online e perché la notizia riguarda la sicurezza informatica."
 categories:
   - Attualità
+header:
+  teaser: /assets/images/blog/hugging-face-modelli-ai-uncensored-ban.svg
+  image: /assets/images/blog/hugging-face-modelli-ai-uncensored-ban.svg
 ---
 
 Da qualche giorno gira sui social un messaggio che dice: "Stanno bannando tutti i modelli AI uncensored su Hugging Face, a causa degli attacchi hacker degli ultimi giorni". Prima di rilanciarlo, vale la pena separare i fatti dalla versione gridata.

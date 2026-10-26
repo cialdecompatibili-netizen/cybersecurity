@@ -8,6 +8,9 @@ seo_title: "Attacco hacker: cosa fare subito e come preparare un piano di rispos
 seo_description: "Cosa fare nelle prime ore dopo un attacco informatico, quali errori evitare e come preparare un piano di risposta e ripristino scritto."
 categories:
   - Incidenti
+header:
+  teaser: /assets/images/blog/attacco-hacker-cosa-fare-piano-risposta.svg
+  image: /assets/images/blog/attacco-hacker-cosa-fare-piano-risposta.svg
 ---
 
 Alla domanda "qual è la prima cosa da fare dopo un attacco?", Anna Vaccarelli, presidente del Clusit, ha risposto a Tgcom24 con una battuta ("piangere sul latte versato"), per poi spiegare la parte seria: evitare ulteriori danni, chiudere le falle il prima possibile e, soprattutto, **avere già un piano d'azione**. Quello che manca, dice, è proprio questo.

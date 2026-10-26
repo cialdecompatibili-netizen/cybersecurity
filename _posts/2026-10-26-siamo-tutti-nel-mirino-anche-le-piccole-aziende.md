@@ -8,6 +8,9 @@ seo_title: "Hacker e piccole aziende: perché siamo tutti un bersaglio"
 seo_description: "Perché i cyber criminali attaccano anche PMI e studi professionali, cosa cercano davvero e le prime mosse concrete per ridurre il rischio."
 categories:
   - Attualità
+header:
+  teaser: /assets/images/blog/siamo-tutti-nel-mirino-anche-le-piccole-aziende.svg
+  image: /assets/images/blog/siamo-tutti-nel-mirino-anche-le-piccole-aziende.svg
 ---
 
 "Siamo piccoli, a chi vuoi che interessiamo?" È la frase che sentiamo più spesso e la più pericolosa. In un'intervista a Tgcom24 pubblicata il 26 ottobre 2026, Anna Vaccarelli, presidente del Clusit (l'Associazione Italiana per la Sicurezza Informatica), ha spiegato che nel mirino degli hacker non ci sono solo banche e grandi gruppi: ci sono anche i comuni cittadini e le aziende di ogni dimensione.

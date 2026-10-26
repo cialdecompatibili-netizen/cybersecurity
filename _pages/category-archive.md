@@ -71,7 +71,8 @@ Per aggiungere una descrizione: admin > Categorie, oppure _data/categorie.json {
     {%- assign cdata = site.data.categorie | where: "nome", cname | first -%}
     {%- assign n = 0 -%}
     {%- for p in posts_l -%}{%- if p.categories contains cname -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor %}
-    <a class="ed-tile" href="#{{ cname | slugify }}">
+    {%- assign cpage = site.pages | where: "categoria", cname | first %}
+    <a class="ed-tile" href="{% if cpage %}{{ cpage.url | relative_url }}{% else %}#{{ cname | slugify }}{% endif %}">
       <b>{{ cname }}</b>
       <span>{{ cdata.descrizione | strip_html | truncate: 95 }}</span>
       <i>{{ n }} {% if n == 1 %}articolo{% else %}articoli{% endif %}</i>
@@ -83,11 +84,12 @@ Per aggiungere una descrizione: admin > Categorie, oppure _data/categorie.json {
   {%- assign cdata = site.data.categorie | where: "nome", cname | first -%}
   {%- assign cposts = "" | split: "" -%}
   {%- for p in posts_l -%}{%- if p.categories contains cname -%}{%- assign cposts = cposts | push: p -%}{%- endif -%}{%- endfor -%}
-  {%- assign feat = cposts | first %}
+  {%- assign feat = cposts | first -%}
+  {%- assign cpage = site.pages | where: "categoria", cname | first %}
   <section class="ed-sec" id="{{ cname | slugify }}">
     <div class="ed-sec-head">
-      <h2>{{ cname }}</h2>
-      <span class="ed-count">{{ cposts.size }} {% if cposts.size == 1 %}articolo{% else %}articoli{% endif %}</span>
+      <h2>{% if cpage %}<a href="{{ cpage.url | relative_url }}" style="color:inherit">{{ cname }}</a>{% else %}{{ cname }}{% endif %}</h2>
+      <span class="ed-count">{% if cpage %}<a href="{{ cpage.url | relative_url }}" style="color:inherit">{% endif %}{{ cposts.size }} {% if cposts.size == 1 %}articolo{% else %}articoli{% endif %}{% if cpage %} &rarr;</a>{% endif %}</span>
     </div>
     {%- if cdata.descrizione and cdata.descrizione != "" %}
     <p class="ed-sec-desc">{{ cdata.descrizione | strip_html }}</p>

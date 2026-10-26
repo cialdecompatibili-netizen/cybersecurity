@@ -8,6 +8,9 @@ seo_title: "Errore umano e attacchi hacker: abitudini che proteggono l'azienda"
 seo_description: "Perché la maggior parte degli attacchi informatici riesce per un errore umano e quali abitudini concrete adottare in azienda: verifica, credenziali, aggiornamenti."
 categories:
   - Prevenzione
+header:
+  teaser: /assets/images/blog/errore-umano-attacchi-hacker-formazione.svg
+  image: /assets/images/blog/errore-umano-attacchi-hacker-formazione.svg
 ---
 
 Si immagina l'hacker che "sfonda" un sistema con trucchi da film. Nella realtà, secondo Anna Vaccarelli, presidente del Clusit, nel 95% dei casi l'attacco va in porto per un **errore umano**. Lo ha detto a Tgcom24 il 26 ottobre 2026, indicando formazione, cultura e consapevolezza come primo rimedio.
