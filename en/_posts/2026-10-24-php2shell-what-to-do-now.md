@@ -6,7 +6,7 @@ excerpt: "Two critical PHP flaws, found with the help of AI. Fixed versions, wha
 seo_title: "PHP2Shell: what to do now (CVE-2026-109618 and CVE-2026-109619)"
 seo_description: "PHP2Shell: fixed PHP versions, how to check your site and what to do right away, explained simply."
 categories:
-  - advisories
+  - Vulnerabilities
 ref: php2shell
 lang: en
 locale: en

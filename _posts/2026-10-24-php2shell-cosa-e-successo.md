@@ -7,7 +7,7 @@ excerpt: "Due falle critiche in PHP, trovate con l'aiuto dell'AI. Versioni corre
 seo_title: "PHP2Shell: cosa fare adesso (CVE-2026-109618 e CVE-2026-109619)"
 seo_description: "PHP2Shell: versioni PHP corrette, come controllare il tuo sito e cosa fare subito, spiegato in italiano."
 categories:
-  - avvisi
+  - Vulnerabilità
 ---
 
 I ricercatori di Wiz hanno spiegato che difetti presenti da decenni erano difficili da trasformare in attacco, ma i modelli di AI più avanzati hanno abbassato quella barriera. È il motivo per cui aggiornare in fretta conta più di prima.
