@@ -2,7 +2,7 @@
 layout: single
 title: "News"
 ref: cat-attualita
-permalink: /en/category/news/
+permalink: /en/blog/news/
 categoria: "News"
 author_profile: false
 classes: wide

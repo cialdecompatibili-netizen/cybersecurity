@@ -2,7 +2,7 @@
 layout: single
 title: "Incidents"
 ref: cat-incidenti
-permalink: /en/category/incidents/
+permalink: /en/blog/incidents/
 categoria: "Incidents"
 author_profile: false
 classes: wide

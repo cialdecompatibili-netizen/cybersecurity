@@ -2,7 +2,7 @@
 layout: single
 title: "Vulnerabilities"
 ref: cat-vulnerabilita
-permalink: /en/category/vulnerabilities/
+permalink: /en/blog/vulnerabilities/
 categoria: "Vulnerabilities"
 author_profile: false
 classes: wide

@@ -2,7 +2,7 @@
 layout: single
 ref: cat-attualita
 title: "Attualità"
-permalink: /categoria/attualita/
+permalink: /blog/attualita/
 categoria: "Attualità"
 author_profile: false
 classes: wide

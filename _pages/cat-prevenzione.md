@@ -2,7 +2,7 @@
 layout: single
 ref: cat-prevenzione
 title: "Prevenzione"
-permalink: /categoria/prevenzione/
+permalink: /blog/prevenzione/
 categoria: "Prevenzione"
 author_profile: false
 classes: wide
