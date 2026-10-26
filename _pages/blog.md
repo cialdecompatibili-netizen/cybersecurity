@@ -142,7 +142,7 @@ share: false
       {% if post.categories.size > 0 %}
       <div class="blog-cats">
         {% for cat in post.categories limit:2 %}
-        <a href="{{ '/categories/#' | prepend: site.baseurl }}{{ cat | slugify }}" class="blog-cat">{{ cat }}</a>
+        <a href="{{ '/categorie/#' | prepend: site.baseurl }}{{ cat | slugify }}" class="blog-cat">{{ cat }}</a>
         {% endfor %}
       </div>
       {% endif %}

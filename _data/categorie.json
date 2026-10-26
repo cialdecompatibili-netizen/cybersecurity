@@ -1,5 +1,21 @@
 [
   {
+    "nome": "Attualità",
+    "descrizione": "Le notizie di sicurezza informatica che contano, spiegate senza giri di parole: cosa è successo e cosa significa per chi ha un sito o un'azienda."
+  },
+  {
+    "nome": "Vulnerabilità",
+    "descrizione": "Falle, CVE e aggiornamenti urgenti: chi è a rischio, quali versioni installare e cosa controllare."
+  },
+  {
+    "nome": "Prevenzione",
+    "descrizione": "Abitudini, configurazioni e controlli che riducono il rischio prima che succeda qualcosa."
+  },
+  {
+    "nome": "Incidenti",
+    "descrizione": "Cosa fare quando l'attacco è già in corso o appena avvenuto: primi passi, ripristino e piano di risposta."
+  },
+  {
     "nome": "journal",
     "descrizione": "Novita', approfondimenti e dietro le quinte"
   }
