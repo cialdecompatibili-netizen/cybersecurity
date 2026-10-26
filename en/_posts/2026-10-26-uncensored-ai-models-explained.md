@@ -3,6 +3,7 @@ layout: single
 ref: modelli-uncensored-spiegati
 title: "'Uncensored' AI models: what they are, what they are for and why they worry security people"
 date: 2026-10-26
+permalink: /en/blog/news/uncensored-ai-models-explained/
 excerpt: "There is talk of unfiltered models and removals on Hugging Face. We explain in plain words what they are, who uses them for work and what changes for a business."
 seo_title: "Uncensored and abliterated AI models: what they are and what risks they bring"
 seo_description: "What uncensored or abliterated artificial intelligence models are, legitimate uses, cybersecurity risks and what businesses can do."

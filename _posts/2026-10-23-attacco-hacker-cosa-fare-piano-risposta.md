@@ -3,6 +3,7 @@ layout: single
 ref: piano-incidente
 title: "Hai subito un attacco hacker? Cosa fare nelle prime ore (e perché serve un piano prima)"
 date: 2026-10-23
+permalink: /blog/incidenti/attacco-hacker-cosa-fare-piano-risposta/
 excerpt: "Quando succede, non c'è tempo per improvvisare. I primi passi per limitare i danni e il piano d'azione che manca a quasi tutte le aziende."
 seo_title: "Attacco hacker: cosa fare subito e come preparare un piano di risposta"
 seo_description: "Cosa fare nelle prime ore dopo un attacco informatico, quali errori evitare e come preparare un piano di risposta e ripristino scritto."

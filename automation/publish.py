@@ -217,6 +217,7 @@ def pubblica_articolo(titolo, categoria, excerpt, corpo, data=None, verifica=Tru
         f'excerpt: "{excerpt}"\n'
         "categories:\n"
         f"  - {categoria}\n"
+        f"permalink: /blog/{slugify(categoria)}/{slug}/\n"
     )
     if image:
         fm += "header:\n"
@@ -229,7 +230,7 @@ def pubblica_articolo(titolo, categoria, excerpt, corpo, data=None, verifica=Tru
         f.write(fm + corpo.strip() + "\n")
 
     _git_push(f"Nuovo articolo: {titolo}")
-    url = f"{SITE_BASE}/{categoria}/{slug}/"
+    url = f"{SITE_BASE}/blog/{slugify(categoria)}/{slug}/"
     _log("articolo", titolo, slug, url, fname)
     print(f"OK ARTICOLO -> {fname}")
     print(f"URL -> {url}")

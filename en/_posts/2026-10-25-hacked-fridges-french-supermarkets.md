@@ -3,6 +3,7 @@ layout: single
 ref: frigoriferi-supermercati
 title: "Hacked fridges in French supermarkets: the lesson for anyone with connected devices"
 date: 2026-10-26
+permalink: /en/blog/vulnerabilities/hacked-fridges-french-supermarkets/
 excerpt: "A postponed update and a fridge connected to the internet: what happened in France and what it has to do with your website, your router and your cameras."
 seo_title: "The supermarket fridge attack: what it teaches businesses"
 seo_description: "The attack on French supermarket refrigeration systems explained simply: missing updates, credentials and what to check in your own company."

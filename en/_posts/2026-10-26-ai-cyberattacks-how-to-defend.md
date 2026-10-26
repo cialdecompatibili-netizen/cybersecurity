@@ -3,6 +3,7 @@ layout: single
 ref: ai-attacchi-difesa
 title: "AI and cyberattacks: why criminals are faster and how to defend yourself"
 date: 2026-10-26
+permalink: /en/blog/prevention/ai-cyberattacks-how-to-defend/
 excerpt: "Artificial intelligence lowers the barrier for attackers. What changes for websites and businesses, and the defenses that remain the most effective: update, check, restore."
 seo_title: "Artificial intelligence and cyberattacks: what changes for businesses"
 seo_description: "How AI makes cyberattacks faster, what it means for websites and servers and which practical defenses still work: updates, access control, backups."

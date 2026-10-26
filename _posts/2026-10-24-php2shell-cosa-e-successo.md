@@ -3,6 +3,7 @@ layout: single
 ref: php2shell
 title: "PHP2Shell: cosa fare adesso (CVE-2026-109618 e CVE-2026-109619)"
 date: 2026-10-24
+permalink: /blog/vulnerabilita/php2shell-cosa-e-successo/
 excerpt: "Due falle critiche in PHP, trovate con l'aiuto dell'AI. Versioni corrette, cosa controllare e cosa fare subito."
 seo_title: "PHP2Shell: cosa fare adesso (CVE-2026-109618 e CVE-2026-109619)"
 seo_description: "PHP2Shell: versioni PHP corrette, come controllare il tuo sito e cosa fare subito, spiegato in italiano."

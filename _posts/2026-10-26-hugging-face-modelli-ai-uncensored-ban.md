@@ -3,6 +3,7 @@ layout: single
 ref: huggingface-uncensored
 title: "Hugging Face bandisce i modelli AI senza filtri? Cosa è vero e cosa no"
 date: 2026-10-26
+permalink: /blog/attualita/hugging-face-modelli-ai-uncensored-ban/
 excerpt: "Sui social circola la notizia che 'stanno bannando tutti i modelli uncensored'. I fatti verificati sono più piccoli e più interessanti: ecco cosa è successo davvero."
 seo_title: "Hugging Face e modelli AI uncensored: ban totale o solo alcuni repository?"
 seo_description: "Hugging Face sta bannando i modelli AI uncensored? Cosa è stato rimosso davvero, cosa resta online e perché la notizia riguarda la sicurezza informatica."

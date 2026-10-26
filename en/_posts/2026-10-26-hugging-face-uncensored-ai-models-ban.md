@@ -3,6 +3,7 @@ layout: single
 ref: huggingface-uncensored
 title: "Is Hugging Face banning unfiltered AI models? What is true and what is not"
 date: 2026-10-26
+permalink: /en/blog/news/hugging-face-uncensored-ai-models-ban/
 excerpt: "A claim is going around social media that 'they are banning all uncensored models'. The verified facts are smaller and more interesting: here is what actually happened."
 seo_title: "Hugging Face and uncensored AI models: total ban or just a few repositories?"
 seo_description: "Is Hugging Face banning uncensored AI models? What was really removed, what is still online and why the story matters for cybersecurity."

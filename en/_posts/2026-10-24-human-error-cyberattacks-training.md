@@ -3,6 +3,7 @@ layout: single
 ref: errore-umano
 title: "95% of attacks succeed because of human error: how to protect the people who work with you"
 date: 2026-10-24
+permalink: /en/blog/prevention/human-error-cyberattacks-training/
 excerpt: "Phishing, fake grandchildren, messages from the bank: most attacks get through a distracted person. A few simple habits make the difference."
 seo_title: "Human error and cyberattacks: habits that protect your company"
 seo_description: "Why most cyberattacks succeed through human error and which concrete habits to adopt at work: verification, credentials, updates."

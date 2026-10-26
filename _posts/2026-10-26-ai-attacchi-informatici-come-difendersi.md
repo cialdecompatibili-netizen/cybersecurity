@@ -3,6 +3,7 @@ layout: single
 ref: ai-attacchi-difesa
 title: "AI e attacchi informatici: perché i criminali sono più veloci e come difendersi"
 date: 2026-10-26
+permalink: /blog/prevenzione/ai-attacchi-informatici-come-difendersi/
 excerpt: "L'intelligenza artificiale abbassa la barriera per chi attacca. Cosa cambia per siti e aziende e le difese che restano le più efficaci: aggiornare, controllare, ripristinare."
 seo_title: "Intelligenza artificiale e cyber attacchi: cosa cambia per le aziende"
 seo_description: "Come l'AI rende gli attacchi informatici più rapidi, cosa significa per siti e server e quali difese pratiche funzionano ancora: aggiornamenti, accessi, backup."

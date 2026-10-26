@@ -3,6 +3,7 @@ layout: single
 ref: nel-mirino
 title: "Siamo tutti nel mirino: perché gli hacker attaccano anche le piccole aziende"
 date: 2026-10-26
+permalink: /blog/attualita/siamo-tutti-nel-mirino-anche-le-piccole-aziende/
 excerpt: "Non serve essere una banca per interessare ai criminali informatici. Cosa cercano, perché una piccola azienda è un bersaglio comodo e da dove si comincia."
 seo_title: "Hacker e piccole aziende: perché siamo tutti un bersaglio"
 seo_description: "Perché i cyber criminali attaccano anche PMI e studi professionali, cosa cercano davvero e le prime mosse concrete per ridurre il rischio."

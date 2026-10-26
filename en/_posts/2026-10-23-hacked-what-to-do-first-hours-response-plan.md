@@ -3,6 +3,7 @@ layout: single
 ref: piano-incidente
 title: "Been hit by a cyberattack? What to do in the first hours (and why you need a plan beforehand)"
 date: 2026-10-23
+permalink: /en/blog/incidents/hacked-what-to-do-first-hours-response-plan/
 excerpt: "When it happens, there is no time to improvise. The first steps to limit the damage, and the action plan that almost every company is missing."
 seo_title: "Cyberattack: what to do right away and how to prepare a response plan"
 seo_description: "What to do in the first hours after a cyberattack, which mistakes to avoid and how to prepare a written response and recovery plan."

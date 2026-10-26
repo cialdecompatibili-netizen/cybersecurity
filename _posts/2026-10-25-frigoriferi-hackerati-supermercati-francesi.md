@@ -3,6 +3,7 @@ layout: single
 ref: frigoriferi-supermercati
 title: "Frigoriferi hackerati nei supermercati francesi: la lezione per chi ha dispositivi in rete"
 date: 2026-10-26
+permalink: /blog/vulnerabilita/frigoriferi-hackerati-supermercati-francesi/
 excerpt: "Un aggiornamento rimandato e un frigorifero collegato a internet: cosa è successo in Francia e cosa c'entra con il tuo sito, il tuo router e le tue telecamere."
 seo_title: "Attacco ai frigoriferi dei supermercati: cosa insegna alle aziende"
 seo_description: "L'attacco ai sistemi di refrigerazione dei supermercati francesi spiegato semplice: aggiornamenti non fatti, credenziali e cosa controllare nella tua azienda."

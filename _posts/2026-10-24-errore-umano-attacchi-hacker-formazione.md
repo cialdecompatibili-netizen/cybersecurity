@@ -3,6 +3,7 @@ layout: single
 ref: errore-umano
 title: "Il 95% degli attacchi riesce per un errore umano: come proteggere chi lavora con te"
 date: 2026-10-24
+permalink: /blog/prevenzione/errore-umano-attacchi-hacker-formazione/
 excerpt: "Phishing, finti nipoti, messaggi della banca: la maggior parte degli attacchi passa da una persona distratta. Poche abitudini semplici fanno la differenza."
 seo_title: "Errore umano e attacchi hacker: abitudini che proteggono l'azienda"
 seo_description: "Perché la maggior parte degli attacchi informatici riesce per un errore umano e quali abitudini concrete adottare in azienda: verifica, credenziali, aggiornamenti."

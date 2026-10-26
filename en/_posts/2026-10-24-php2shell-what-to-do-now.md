@@ -2,6 +2,7 @@
 layout: single
 title: "PHP2Shell: what to do now (CVE-2026-109618 and CVE-2026-109619)"
 date: 2026-10-24
+permalink: /en/blog/vulnerabilities/php2shell-what-to-do-now/
 excerpt: "Two critical PHP flaws, found with the help of AI. Fixed versions, what to check and what to do right away."
 seo_title: "PHP2Shell: what to do now (CVE-2026-109618 and CVE-2026-109619)"
 seo_description: "PHP2Shell: fixed PHP versions, how to check your site and what to do right away, explained simply."

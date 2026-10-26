@@ -3,6 +3,7 @@ layout: single
 ref: nel-mirino
 title: "We are all targets: why hackers attack small businesses too"
 date: 2026-10-26
+permalink: /en/blog/news/all-targets-small-businesses/
 excerpt: "You do not have to be a bank to interest cybercriminals. What they are after, why a small business is a convenient target and where to start."
 seo_title: "Hackers and small businesses: why we are all a target"
 seo_description: "Why cybercriminals attack SMEs and professional firms too, what they are really after and the first concrete moves to reduce the risk."
